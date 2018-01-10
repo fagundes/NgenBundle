@@ -6,7 +6,7 @@
  * This source file is subject to the GPL v3.0 license that is bundled
  * with this source code in the file LICENSE.
  */
-var AcademicUnit = Frontend.extend({
+var NetworkEntity = Frontend.extend({
     dropDownChangeLinks: function () {
         if (this.eventTarget.data('action') == "reactivate") {
             this.eventTarget.hide();
@@ -18,10 +18,10 @@ var AcademicUnit = Frontend.extend({
     },
     doChangeState: function (event) {
         if (this.eventTarget.data('action') == 'reactivate') {
-            $.publish('/cert_unlp/academic_unit/activate', [this.eventTarget.parents('tr').data('id'), $.proxy(this.stateChanged, this)]);
+            $.publish('/cert_unlp/network_entity/activate', [this.eventTarget.parents('tr').data('id'), $.proxy(this.stateChanged, this)]);
         } else {
             if (this.eventTarget.data('action') == 'desactivate') {
-                $.publish('/cert_unlp/academic_unit/desactivate', [this.eventTarget.parents('tr').data('id'), $.proxy(this.stateChanged, this)]);
+                $.publish('/cert_unlp/network_entity/desactivate', [this.eventTarget.parents('tr').data('id'), $.proxy(this.stateChanged, this)]);
             }
         }
 

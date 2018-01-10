@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace CertUnlp\NgenBundle\Entity;
+namespace CertUnlp\NgenBundle\Entity\Network;
 
 use Doctrine\ORM\Mapping as ORM;
 use CertUnlp\NgenBundle\Model\NetworkInterface;
@@ -24,7 +24,7 @@ use JMS\Serializer\Annotation as JMS;
  * Network
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="CertUnlp\NgenBundle\Entity\NetworkRepository")
+ * @ORM\Entity(repositoryClass="CertUnlp\NgenBundle\Entity\Network\NetworkRepository")
  * @UniqueEntity(
  *     fields={"ip", "ipMask","isActive"},
  *     message="This network was already added!")
@@ -76,16 +76,16 @@ class Network implements NetworkInterface {
     private $numericIp;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\NetworkAdmin", inversedBy="networks",cascade={"persist"}) 
+     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\Network\NetworkAdmin", inversedBy="networks",cascade={"persist"}) 
      * @JMS\Expose
      */
     private $network_admin;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\AcademicUnit", inversedBy="networks",cascade={"persist"}) 
+     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\Network\NetworkEntity", inversedBy="networks",cascade={"persist"}) 
      * @JMS\Expose
      */
-    private $academic_unit;
+    private $network_entity;
 
     /** 
      * @ORM\OneToMany(targetEntity="CertUnlp\NgenBundle\Model\IncidentInterface",mappedBy="network", cascade={"persist","remove"}, fetch="EAGER")) 
@@ -174,10 +174,10 @@ class Network implements NetworkInterface {
     /**
      * Set network_admin
      *
-     * @param \CertUnlp\NgenBundle\Entity\NetworkAdmin $network_admin
+     * @param \CertUnlp\NgenBundle\Entity\Network\NetworkAdmin $network_admin
      * @return Network
      */
-    public function setNetworkAdmin(\CertUnlp\NgenBundle\Entity\NetworkAdmin $network_admin = null) {
+    public function setNetworkAdmin(\CertUnlp\NgenBundle\Entity\Network\NetworkAdmin $network_admin = null) {
         $this->network_admin = $network_admin;
 
         return $this;
@@ -186,31 +186,31 @@ class Network implements NetworkInterface {
     /**
      * Get network_admin
      *
-     * @return \CertUnlp\NgenBundle\Entity\NetworkAdmin 
+     * @return \CertUnlp\NgenBundle\Entity\Network\NetworkAdmin 
      */
     public function getNetworkAdmin() {
         return $this->network_admin;
     }
 
     /**
-     * Set academic_unit
+     * Set network_entity
      *
-     * @param \CertUnlp\NgenBundle\Entity\AcademicUnit $academic_unit
+     * @param \CertUnlp\NgenBundle\Entity\Network\NetworkEntity $network_entity
      * @return Network
      */
-    public function setAcademicUnit(\CertUnlp\NgenBundle\Entity\AcademicUnit $academic_unit = null) {
-        $this->academic_unit = $academic_unit;
+    public function setNetworkEntity(\CertUnlp\NgenBundle\Entity\Network\NetworkEntity $network_entity = null) {
+        $this->network_entity = $network_entity;
 
         return $this;
     }
 
     /**
-     * Get academic_unit
+     * Get network_entity
      *
-     * @return \CertUnlp\NgenBundle\Entity\AcademicUnit 
+     * @return \CertUnlp\NgenBundle\Entity\Network\NetworkEntity 
      */
-    public function getAcademicUnit() {
-        return $this->academic_unit;
+    public function getNetworkEntity() {
+        return $this->network_entity;
     }
 
     /**

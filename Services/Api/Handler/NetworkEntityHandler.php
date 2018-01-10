@@ -17,7 +17,7 @@ use CertUnlp\NgenBundle\Exception\InvalidFormException;
 use Symfony\Component\Security\Core\SecurityContext;
 use CertUnlp\NgenBundle\Services\Api\Handler\Handler;
 
-class AcademicUnitHandler extends Handler {
+class NetworkEntityHandler extends Handler {
 
     /**
      * Delete a Network.

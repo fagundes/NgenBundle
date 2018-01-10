@@ -7,9 +7,9 @@
  with this source code in the file LICENSE.
 #}
 
-{% extends 'CertUnlpNgenBundle::AcademicUnit/Frontend/frontend.html.twig' %}
+{% extends 'CertUnlpNgenBundle::NetworkEntity/Frontend/frontend.html.twig' %}
 {% block content_header %}
-    <h1 class="page-header"> {{object}}             {%include "CertUnlpNgenBundle:AcademicUnit:Frontend/list/stateLabel.html.twig" with {'academicUnit': object}%}
+    <h1 class="page-header"> {{object}}             {%include "CertUnlpNgenBundle:NetworkEntity:Frontend/list/stateLabel.html.twig" with {'NetworkEntity': object}%}
     </h1>
 {% endblock %}
 {% block content_body %}
@@ -60,7 +60,7 @@
                                     Active
                                 </td>
                                 <td class="">
-                                    {%include "CertUnlpNgenBundle:AcademicUnit:Frontend/list/stateLabel.html.twig" with {'academicUnit': object}%}
+                                    {%include "CertUnlpNgenBundle:NetworkEntity:Frontend/list/stateLabel.html.twig" with {'NetworkEntity': object}%}
                                 </td>
                             </tr>
                             <tr>

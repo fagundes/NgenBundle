@@ -7,7 +7,7 @@
  with this source code in the file LICENSE.
 #}
 
-{% extends 'CertUnlpNgenBundle::AcademicUnit/Frontend/frontend.html.twig' %}
+{% extends 'CertUnlpNgenBundle::NetworkEntity/Frontend/frontend.html.twig' %}
 {% block content_header %}
     <h1 class="page-header">{{icon('plus-circle fa-fw')}}Add Academic Unit</h1>
 {% endblock %}
@@ -22,11 +22,11 @@
     {{ parent() }}
 
     {% javascripts
-    '@CertUnlpNgenBundle/Resources/public/js/academic_unit/AcademicUnitForm.js'
+    '@CertUnlpNgenBundle/Resources/public/js/network_entity/NetworkEntityForm.js'
     %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
     <script>
-        var academic_unit_form = new AcademicUnitForm();
+        var network_entity_form = new NetworkEntityForm();
     </script>
 {% endblock %}

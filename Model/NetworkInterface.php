@@ -12,9 +12,9 @@
 namespace CertUnlp\NgenBundle\Model;
 
 use CertUnlp\NgenBundle\Model\IncidentInterface;
-use CertUnlp\NgenBundle\Entity\NetworkAdmin;
-use CertUnlp\NgenBundle\Entity\AcademicUnit;
-use CertUnlp\NgenBundle\Entity\Network;
+use CertUnlp\NgenBundle\Entity\Network\NetworkAdmin;
+use CertUnlp\NgenBundle\Entity\Network\NetworkEntity;
+use CertUnlp\NgenBundle\Entity\Network\Network;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -61,7 +61,7 @@ interface NetworkInterface {
     /**
      * Set networkAdmin
      *
-     * @param \CertUnlp\NgenBundle\Entity\NetworkAdmin $networkAdmin
+     * @param \CertUnlp\NgenBundle\Entity\Network\NetworkAdmin $networkAdmin
      * @return Network
      */
     public function setNetworkAdmin(NetworkAdmin $networkAdmin = null);
@@ -69,24 +69,24 @@ interface NetworkInterface {
     /**
      * Get networkAdmin
      *
-     * @return \CertUnlp\NgenBundle\Entity\NetworkAdmin 
+     * @return \CertUnlp\NgenBundle\Entity\Network\NetworkAdmin 
      */
     public function getNetworkAdmin();
 
     /**
-     * Set academicUnit
+     * Set NetworkEntity
      *
-     * @param \CertUnlp\NgenBundle\Entity\AcademicUnit $academicUnit
+     * @param \CertUnlp\NgenBundle\Entity\Network\NetworkEntity $NetworkEntity
      * @return Network
      */
-    public function setAcademicUnit(AcademicUnit $academicUnit = null);
+    public function setNetworkEntity(NetworkEntity $NetworkEntity = null);
 
     /**
-     * Get academicUnit
+     * Get NetworkEntity
      *
-     * @return \CertUnlp\NgenBundle\Entity\AcademicUnit 
+     * @return \CertUnlp\NgenBundle\Entity\Network\NetworkEntity 
      */
-    public function getAcademicUnit();
+    public function getNetworkEntity();
 
     /**
      * Constructor

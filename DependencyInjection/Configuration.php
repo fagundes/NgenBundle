@@ -48,7 +48,7 @@ class Configuration implements ConfigurationInterface {
         $this->addNetworkSection($rootNode);
         $this->addFeedSection($rootNode);
         $this->addSeedSection($rootNode);
-        $this->addAcademicUnitSection($rootNode);
+        $this->addNetworkEntitySection($rootNode);
         return $treeBuilder;
     }
 
@@ -337,20 +337,20 @@ class Configuration implements ConfigurationInterface {
             ->end();
 }
 
-    private function addAcademicUnitSection(ArrayNodeDefinition $rootNode) {
+    private function addNetworkEntitySection(ArrayNodeDefinition $rootNode) {
         $rootNode
                 ->children()
-                    ->arrayNode('academic_unit')
+                    ->arrayNode('network_entity')
                         ->addDefaultsIfNotSet()
                         ->children()
                             ->scalarNode('class')
-                                ->defaultValue('CertUnlp\NgenBundle\Entity\AcademicUnit')
+                                ->defaultValue('CertUnlp\NgenBundle\Entity\Network\NetworkEntity')
                             ->end()
                             ->arrayNode('handler')
                                 ->addDefaultsIfNotSet()
                                 ->children()
                                     ->scalarNode('class')
-                                        ->defaultValue('CertUnlp\NgenBundle\Services\Api\Handler\AcademicUnitHandler')
+                                        ->defaultValue('CertUnlp\NgenBundle\Services\Api\Handler\NetworkEntityHandler')
                                     ->end()
                                 ->end()
                             ->end()
@@ -358,7 +358,7 @@ class Configuration implements ConfigurationInterface {
                                 ->addDefaultsIfNotSet()
                                 ->children()
                                     ->scalarNode('class')
-                                        ->defaultValue('CertUnlp\NgenBundle\Form\AcademicUnitType')
+                                        ->defaultValue('CertUnlp\NgenBundle\Form\NetworkEntityType')
                                     ->end()
                                 ->end()
                             ->end()
@@ -373,7 +373,7 @@ class Configuration implements ConfigurationInterface {
                         ->addDefaultsIfNotSet()
                         ->children()
                             ->scalarNode('class')
-                                ->defaultValue('CertUnlp\NgenBundle\Entity\Network')
+                                ->defaultValue('CertUnlp\NgenBundle\Entity\Network\Network')
                             ->end()
                             ->scalarNode('default_network')
                                 ->defaultValue('')
@@ -406,7 +406,7 @@ class Configuration implements ConfigurationInterface {
                             ->addDefaultsIfNotSet()
                             ->children()
                                 ->scalarNode('class')
-                                    ->defaultValue('CertUnlp\NgenBundle\Entity\NetworkAdmin')
+                                    ->defaultValue('CertUnlp\NgenBundle\Entity\Network\NetworkAdmin')
                                 ->end()
                                 ->arrayNode('handler')
                                     ->addDefaultsIfNotSet()

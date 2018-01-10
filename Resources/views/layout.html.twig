@@ -75,6 +75,9 @@
                                         <li>
                                             <a href="{{path('cert_unlp_ngen_network_admin_frontend_home')}}" {{ ('admin' in app.request.get('_route'))? 'class="active"' : '' }}>{{icon('users fa-fw')}} Admins</a>
                                         </li>
+                                        <li>
+                                            <a href="{{path('cert_unlp_ngen_network_entity_frontend_home')}}" {{ ('entity' in app.request.get('_route'))? 'class="active"' : '' }}>{{icon('building fa-fw')}} Entities</a>
+                                        </li>
                                     </ul>
 
                                 </li>
@@ -82,7 +85,7 @@
                                     <a href="{{path('cert_unlp_ngen_user_frontend_home')}}" {{ ('user' in app.request.get('_route'))? 'class="active"' : '' }}>{{icon('users fa-fw')}} Users</a>
                                 </li>
                                 <li>
-                                    <a href="{{path('cert_unlp_ngen_academic_unit_frontend_home')}}" {{ ('academic' in app.request.get('_route'))? 'class="active"' : '' }}>{{icon('cubes fa-fw')}} Academic Units</a>
+                                    <a href="{{path('cert_unlp_ngen_network_entity_frontend_home')}}" {{ ('academic' in app.request.get('_route'))? 'class="active"' : '' }}>{{icon('cubes fa-fw')}} Academic Units</a>
                                 </li>
 
                             </ul>

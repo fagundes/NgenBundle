@@ -59,10 +59,10 @@ cert_ngen_user_api:
     resource: 'CertUnlp\NgenBundle\Controller\UserController'
     name_prefix:  api_2_
 
-cert_ngen_academic_unit_api:
+cert_ngen_network_entity_api:
     type: rest
     prefix: /v2
-    resource: 'CertUnlp\NgenBundle\Controller\AcademicUnitController'
+    resource: 'CertUnlp\NgenBundle\Controller\NetworkEntityController'
     name_prefix:  api_2_
 
 fos_comment_api:

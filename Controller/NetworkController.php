@@ -19,7 +19,7 @@ use FOS\RestBundle\Request\ParamFetcherInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use CertUnlp\NgenBundle\Form\NetworkType;
-use CertUnlp\NgenBundle\Entity\Network;
+use CertUnlp\NgenBundle\Entity\Network\Network;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations as FOS;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -85,7 +85,7 @@ class NetworkController extends FOSRestController {
      * @ApiDoc(
      *   resource = true,
      *   description = "Gets a Network for a given host address",
-     *   output = "CertUnlp\NgenBundle\Entity\Network",
+     *   output = "CertUnlp\NgenBundle\Entity\Network\Network",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     404 = "Returned when the network is not found"
@@ -115,7 +115,7 @@ class NetworkController extends FOSRestController {
      * @ApiDoc(
      *   resource = true,
      *   description = "Gets a Network for a given id",
-     *   output = "CertUnlp\NgenBundle\Entity\Network",
+     *   output = "CertUnlp\NgenBundle\Entity\Network\Network",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     404 = "Returned when the network is not found"

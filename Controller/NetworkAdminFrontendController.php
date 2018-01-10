@@ -24,7 +24,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use CertUnlp\NgenBundle\Form\NetworkAdminType;
-use CertUnlp\NgenBundle\Entity\NetworkAdmin;
+use CertUnlp\NgenBundle\Entity\Network\NetworkAdmin;
 
 class NetworkAdminFrontendController extends Controller {
 

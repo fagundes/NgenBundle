@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace CertUnlp\NgenBundle\Entity;
+namespace CertUnlp\NgenBundle\Entity\Network;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -20,7 +20,7 @@ use JMS\Serializer\Annotation as JMS;
  *
  * @ORM\Table()
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="CertUnlp\NgenBundle\Entity\NetworkAdminRepository")
+ * @ORM\Entity()
  * @JMS\ExclusionPolicy("all")
  */
 class NetworkAdmin {
@@ -58,7 +58,7 @@ class NetworkAdmin {
      */
     private $email;
 
-    /** @ORM\OneToMany(targetEntity="CertUnlp\NgenBundle\Entity\Network",mappedBy="network_admin", cascade={"persist","remove"}, fetch="EAGER")) */
+    /** @ORM\OneToMany(targetEntity="CertUnlp\NgenBundle\Entity\Network\Network",mappedBy="network_admin", cascade={"persist","remove"}, fetch="EAGER")) */
     private $networks;
 
     /** @ORM\OneToMany(targetEntity="CertUnlp\NgenBundle\Model\IncidentInterface",mappedBy="network_admin", cascade={"persist","remove"}, fetch="EAGER")) */
@@ -153,10 +153,10 @@ class NetworkAdmin {
     /**
      * Add networks
      *
-     * @param \CertUnlp\NgenBundle\Entity\Network $networks
+     * @param \CertUnlp\NgenBundle\Entity\Network\Network $networks
      * @return NetworkAdmin
      */
-    public function addNetwork(\CertUnlp\NgenBundle\Entity\Network $networks) {
+    public function addNetwork(\CertUnlp\NgenBundle\Entity\Network\Network $networks) {
         $this->networks[] = $networks;
 
         return $this;
@@ -165,9 +165,9 @@ class NetworkAdmin {
     /**
      * Remove networks
      *
-     * @param \CertUnlp\NgenBundle\Entity\Network $networks
+     * @param \CertUnlp\NgenBundle\Entity\Network\Network $networks
      */
-    public function removeNetwork(\CertUnlp\NgenBundle\Entity\Network $networks) {
+    public function removeNetwork(\CertUnlp\NgenBundle\Entity\Network\Network $networks) {
         $this->networks->removeElement($networks);
     }
 

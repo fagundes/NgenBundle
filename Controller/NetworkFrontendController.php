@@ -18,7 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use CertUnlp\NgenBundle\Form\NetworkType;
-use CertUnlp\NgenBundle\Entity\Network;
+use CertUnlp\NgenBundle\Entity\Network\Network;
 
 class NetworkFrontendController extends Controller {
 

@@ -50,7 +50,7 @@ fos_elastica:
                                             type: keyword
                                         isActive:
                                             type: boolean
-                                academicUnit:
+                                NetworkEntity:
                                     type: "object"
                                     properties:
                                         slug:
@@ -223,7 +223,7 @@ fos_elastica:
                                     type: keyword
                                 isActive:
                                     type: boolean
-                        academicUnit:
+                        NetworkEntity:
                             type: "object"
                             properties:
                                 slug:
@@ -235,7 +235,7 @@ fos_elastica:
                         # listener and finder are not supported by
                         # propel and should be removed
                         driver: orm
-                        model: CertUnlp\NgenBundle\Entity\Network
+                        model: CertUnlp\NgenBundle\Entity\Network\Network
                         provider: ~
                         finder: ~
         network_admins:
@@ -262,13 +262,13 @@ fos_elastica:
                         # listener and finder are not supported by
                         # propel and should be removed
                         driver: orm
-                        model: CertUnlp\NgenBundle\Entity\NetworkAdmin
+                        model: CertUnlp\NgenBundle\Entity\Network\NetworkAdmin
                         provider: ~
                         finder: ~
-        academic_units:
-            index_name: academic_units_%kernel.environment%
+        network_entities:
+            index_name: network_network_entities_%kernel.environment%
             types:
-                academic_unit:
+                network_entity:
                     properties:
                         id:
                             type: integer
@@ -287,7 +287,7 @@ fos_elastica:
                         # listener and finder are not supported by
                         # propel and should be removed
                         driver: orm
-                        model: CertUnlp\NgenBundle\Entity\AcademicUnit
+                        model: CertUnlp\NgenBundle\Entity\Network\NetworkEntity
                         provider: ~
                         finder: ~
         feeds:

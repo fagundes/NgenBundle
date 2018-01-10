@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace CertUnlp\NgenBundle\Entity;
+namespace CertUnlp\NgenBundle\Entity\Network;
 
 use Doctrine\ORM\EntityRepository;
 

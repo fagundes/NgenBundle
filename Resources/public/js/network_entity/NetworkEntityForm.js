@@ -6,21 +6,21 @@
  * This source file is subject to the GPL v3.0 license that is bundled
  * with this source code in the file LICENSE.
  */
-var AcademicUnitForm = Form.extend({
+var NetworkEntityForm = Form.extend({
     config: function () {
-        this.setAcademicUnitId();
+        this.setNetworkEntityId();
     },
     getObjectBrief: function () {
-        return 'academic_unit';
+        return 'network_entity';
     },
     getObjectId: function () {
-        return  this.getAcademicUnitId();
+        return  this.getNetworkEntityId();
     },
-    setAcademicUnitId: function () {
-        this.academic_unit_id = (($('#name').val().replace(' ', '_'))).toLowerCase();
+    setNetworkEntityId: function () {
+        this.network_entity_id = (($('#name').val().replace(' ', '_'))).toLowerCase();
     },
-    getAcademicUnitId: function () {
-        return  this.academic_unit_id;
+    getNetworkEntityId: function () {
+        return  this.network_entity_id;
     },
     handleExtraErrors: function (jqXHR) {
 //        $.each(jqXHR.responseJSON.errors.errors, function (k, v) {

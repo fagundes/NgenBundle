@@ -14,10 +14,10 @@
     <h1 class="page-header">{{icon('users fa-fw')}} Academic Units</h1>
 {% endblock %}
 
-{% block sideBar_search_path %}{{path('cert_unlp_ngen_academic_unit_search')}}{% endblock %}
+{% block sideBar_search_path %}{{path('cert_unlp_ngen_network_entity_search')}}{% endblock %}
 
 {% block content_body %}
-    {% include 'CertUnlpNgenBundle:AcademicUnit:Frontend/list/academicUnitList.html.twig' with {'academicUnits': objects  } %}
+    {% include 'CertUnlpNgenBundle:NetworkEntity:Frontend/list/NetworkEntityList.html.twig' with {'NetworkEntities': objects  } %}
 {% endblock %}
 
 
@@ -25,13 +25,13 @@
     {{ parent() }}
 
     {% javascripts
-    '@CertUnlpNgenBundle/Resources/public/js/academic_unit/AcademicUnit.js'
-    '@CertUnlpNgenBundle/Resources/public/js/academic_unit/AcademicUnitApi.js'
+    '@CertUnlpNgenBundle/Resources/public/js/network_entity/NetworkEntity.js'
+    '@CertUnlpNgenBundle/Resources/public/js/network_entity/NetworkEntityApi.js'
     %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
     <script>
-        var academic_unit = new AcademicUnit();
-        var academic_unit_api = new AcademicUnitApi("{{path("api_2_get")}}/", "{{app.user.apiKey}}");
+        var network_entity = new NetworkEntity();
+        var network_entity_api = new NetworkEntityApi("{{path("api_2_get")}}/", "{{app.user.apiKey}}");
     </script>
 {% endblock %}

@@ -9,20 +9,20 @@
  * with this source code in the file LICENSE.
  */
 
-namespace CertUnlp\NgenBundle\Entity;
+namespace CertUnlp\NgenBundle\Entity\Network;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
 
 /**
- * AcademicUnit
+ * NetworkEntity
  *
  * @ORM\Table()
  * @ORM\Entity
  * @JMS\ExclusionPolicy("all")
  */
-class AcademicUnit {
+class NetworkEntity {
 
     /**
      * @var integer
@@ -50,10 +50,10 @@ class AcademicUnit {
      * */
     private $slug;
 
-    /** @ORM\OneToMany(targetEntity="CertUnlp\NgenBundle\Entity\Network",mappedBy="academic_unit", cascade={"persist","remove"}, fetch="EAGER")) */
+    /** @ORM\OneToMany(targetEntity="CertUnlp\NgenBundle\Entity\Network\Network",mappedBy="network_entity", cascade={"persist","remove"}, fetch="EAGER")) */
     private $networks;
 
-    /** @ORM\OneToMany(targetEntity="CertUnlp\NgenBundle\Model\IncidentInterface",mappedBy="academic_unit", cascade={"persist","remove"}, fetch="EAGER")) */
+    /** @ORM\OneToMany(targetEntity="CertUnlp\NgenBundle\Model\IncidentInterface",mappedBy="network_entity", cascade={"persist","remove"}, fetch="EAGER")) */
     private $incidents;
 
     /**
@@ -99,7 +99,7 @@ class AcademicUnit {
      * Set name
      *
      * @param string $name
-     * @return AcademicUnit
+     * @return NetworkEntity
      */
     public function setName($name) {
         $this->name = $name;
@@ -127,10 +127,10 @@ class AcademicUnit {
     /**
      * Add networks
      *
-     * @param \CertUnlp\NgenBundle\Entity\Network $networks
-     * @return AcademicUnit
+     * @param \CertUnlp\NgenBundle\Entity\Network\Network $networks
+     * @return NetworkEntity
      */
-    public function addNetwork(\CertUnlp\NgenBundle\Entity\Network $networks) {
+    public function addNetwork(\CertUnlp\NgenBundle\Entity\Network\Network $networks) {
         $this->networks[] = $networks;
 
         return $this;
@@ -139,9 +139,9 @@ class AcademicUnit {
     /**
      * Remove networks
      *
-     * @param \CertUnlp\NgenBundle\Entity\Network $networks
+     * @param \CertUnlp\NgenBundle\Entity\Network\Network $networks
      */
-    public function removeNetwork(\CertUnlp\NgenBundle\Entity\Network $networks) {
+    public function removeNetwork(\CertUnlp\NgenBundle\Entity\Network\Network $networks) {
         $this->networks->removeElement($networks);
     }
 
@@ -158,7 +158,7 @@ class AcademicUnit {
      * Set slug
      *
      * @param string $slug
-     * @return AcademicUnit
+     * @return NetworkEntity
      */
     public function setSlug($slug) {
         $this->slug = $slug;
@@ -179,7 +179,7 @@ class AcademicUnit {
      * Add incidents
      *
      * @param \CertUnlp\NgenBundle\Model\IncidentInterface $incidents
-     * @return AcademicUnit
+     * @return NetworkEntity
      */
     public function addIncident(\CertUnlp\NgenBundle\Model\IncidentInterface $incidents) {
         $this->incidents[] = $incidents;
@@ -210,7 +210,7 @@ class AcademicUnit {
      *
      * @param \DateTime $createdAt
      *
-     * @return AcademicUnit
+     * @return NetworkEntity
      */
     public function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
@@ -232,7 +232,7 @@ class AcademicUnit {
      *
      * @param \DateTime $updatedAt
      *
-     * @return AcademicUnit
+     * @return NetworkEntity
      */
     public function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
@@ -254,7 +254,7 @@ class AcademicUnit {
      *
      * @param boolean $isActive
      *
-     * @return AcademicUnit
+     * @return NetworkEntity
      */
     public function setIsActive($isActive) {
         $this->isActive = $isActive;

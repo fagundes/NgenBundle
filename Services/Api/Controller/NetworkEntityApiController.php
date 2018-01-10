@@ -17,7 +17,7 @@ use Symfony\Component\Form\FormTypeInterface;
 use CertUnlp\NgenBundle\Exception\InvalidFormException;
 use CertUnlp\NgenBundle\Services\Api\Controller\ApiController;
 
-class AcademicUnitApiController extends ApiController {
+class NetworkEntityApiController extends ApiController {
 
     /**
      * Create a Object from the submitted data.

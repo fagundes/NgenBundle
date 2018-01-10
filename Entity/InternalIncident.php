@@ -48,18 +48,18 @@ class InternalIncident extends Incident {
     private $network;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\NetworkAdmin", inversedBy="incidents")    
+     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\Network\NetworkAdmin", inversedBy="incidents")    
      * @JMS\Expose
      * @JMS\Groups({"api"})
      */
     private $network_admin;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\AcademicUnit", inversedBy="incidents") 
+     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\Network\NetworkEntity", inversedBy="incidents") 
      * @JMS\Expose
      * @JMS\Groups({"api"})
      */
-    private $academic_unit;
+    private $network_entity;
 
     /**
      * @var string
@@ -80,7 +80,7 @@ class InternalIncident extends Incident {
     public function setNetwork(NetworkInterface $network = null) {
         $this->network = $network;
         $this->setNetworkAdmin($network->getNetworkAdmin());
-        $this->setAcademicUnit($network->getAcademicUnit());
+        $this->setNetworkEntity($network->getNetworkEntity());
 
         return $this;
     }
@@ -97,11 +97,11 @@ class InternalIncident extends Incident {
     /**
      * Set networkAdmin
      *
-     * @param \CertUnlp\NgenBundle\Entity\NetworkAdmin $networkAdmin
+     * @param \CertUnlp\NgenBundle\Entity\Network\NetworkAdmin $networkAdmin
      *
      * @return InternalIncident
      */
-    public function setNetworkAdmin(\CertUnlp\NgenBundle\Entity\NetworkAdmin $networkAdmin = null) {
+    public function setNetworkAdmin(\CertUnlp\NgenBundle\Entity\Network\NetworkAdmin $networkAdmin = null) {
         $this->network_admin = $networkAdmin;
 
         return $this;
@@ -110,32 +110,32 @@ class InternalIncident extends Incident {
     /**
      * Get networkAdmin
      *
-     * @return \CertUnlp\NgenBundle\Entity\NetworkAdmin
+     * @return \CertUnlp\NgenBundle\Entity\Network\NetworkAdmin
      */
     public function getNetworkAdmin() {
         return $this->network_admin;
     }
 
     /**
-     * Set academicUnit
+     * Set NetworkEntity
      *
-     * @param \CertUnlp\NgenBundle\Entity\AcademicUnit $academicUnit
+     * @param \CertUnlp\NgenBundle\Entity\Network\NetworkEntity $NetworkEntity
      *
      * @return InternalIncident
      */
-    public function setAcademicUnit(\CertUnlp\NgenBundle\Entity\AcademicUnit $academicUnit = null) {
-        $this->academic_unit = $academicUnit;
+    public function setNetworkEntity(\CertUnlp\NgenBundle\Entity\Network\NetworkEntity $NetworkEntity = null) {
+        $this->network_entity = $NetworkEntity;
 
         return $this;
     }
 
     /**
-     * Get academicUnit
+     * Get NetworkEntity
      *
-     * @return \CertUnlp\NgenBundle\Entity\AcademicUnit
+     * @return \CertUnlp\NgenBundle\Entity\Network\NetworkEntity
      */
-    public function getAcademicUnit() {
-        return $this->academic_unit;
+    public function getNetworkEntity() {
+        return $this->network_entity;
     }
 
     public function getEmails() {

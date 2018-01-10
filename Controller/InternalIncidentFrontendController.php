@@ -30,7 +30,7 @@ class InternalIncidentFrontendController extends Controller {
      * @Template("CertUnlpNgenBundle:InternalIncident:Frontend/home.html.twig")
      * @Route("/", name="cert_unlp_ngen_internal_incident_frontend_home")
      */
-    public function homeAction(Request $request) {
+    public function homeAction(Request $request) {               
         return $this->getFrontendController()->homeEntity($request);
     }
 

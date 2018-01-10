@@ -20,7 +20,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
-class AcademicUnitType extends AbstractType {
+class NetworkEntityType extends AbstractType {
 
     /**
      * @param FormBuilderInterface $builder
@@ -52,7 +52,7 @@ class AcademicUnitType extends AbstractType {
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-        'data_class' => 'CertUnlp\NgenBundle\Entity\AcademicUnit',
+        'data_class' => 'CertUnlp\NgenBundle\Entity\Network\NetworkEntity',
         'csrf_protection' => false,
         ));
     }

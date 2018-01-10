@@ -45,8 +45,8 @@ class NetworkType extends AbstractType {
                                 ->orderBy('na.name', 'ASC');
                     }
                 ))
-                ->add('academicUnit', EntityType::class, array(
-                    'class' => 'CertUnlpNgenBundle:AcademicUnit',
+                ->add('NetworkEntity', EntityType::class, array(
+                    'class' => 'CertUnlpNgenBundle:NetworkEntity',
                     'required' => true,
                     'empty_value' => 'Choose a unit',
                     'attr' => array('help_text' => 'The unit to which the network belongs'),
@@ -86,7 +86,7 @@ class NetworkType extends AbstractType {
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'CertUnlp\NgenBundle\Entity\Network',
+            'data_class' => 'CertUnlp\NgenBundle\Entity\Network\Network',
             'csrf_protection' => false,
         ));
     }

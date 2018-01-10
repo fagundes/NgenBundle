@@ -19,7 +19,7 @@ use FOS\RestBundle\Request\ParamFetcherInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use CertUnlp\NgenBundle\Form\NetworkAdminType;
-use CertUnlp\NgenBundle\Entity\NetworkAdmin;
+use CertUnlp\NgenBundle\Entity\Network\NetworkAdmin;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations as FOS;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -87,7 +87,7 @@ class NetworkAdminController extends FOSRestController {
      * @ApiDoc(
      *   resource = true,
      *   description = "Gets a network admin for a given id",
-     *   output = "CertUnlp\NgenBundle\Entity\NetworkAdmin",
+     *   output = "CertUnlp\NgenBundle\Entity\Network\NetworkAdmin",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     404 = "Returned when the network is not found"

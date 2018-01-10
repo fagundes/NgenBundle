@@ -18,18 +18,18 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use CertUnlp\NgenBundle\Form\AcademicUnitType;
-use CertUnlp\NgenBundle\Entity\AcademicUnit;
+use CertUnlp\NgenBundle\Form\NetworkEntityType;
+use CertUnlp\NgenBundle\Entity\Network\NetworkEntity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations as FOS;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use CertUnlp\NgenBundle\Exception\InvalidFormException;
 
-class AcademicUnitController extends FOSRestController {
+class NetworkEntityController extends FOSRestController {
 
     public function getApiController() {
 
-        return $this->container->get('cert_unlp.ngen.academic_unit.api.controller');
+        return $this->container->get('cert_unlp.ngen.network_entity.api.controller');
     }
 
     /**
@@ -54,7 +54,7 @@ class AcademicUnitController extends FOSRestController {
     }
 
     /**
-     * List all academic unit academic_unit.
+     * List all academic unit network_entity.
      *
      * @ApiDoc(
      *   resource = true,
@@ -63,13 +63,13 @@ class AcademicUnitController extends FOSRestController {
      *   }
      * )
      *
-     * @FOS\Get("/academic_unit")
+     * @FOS\Get("/network_entity")
 
-     * @FOS\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing academic unit academic_unit.")
-     * @FOS\QueryParam(name="limit", requirements="\d+", default="5", description="How many academic unit academic_unit to return.")
+     * @FOS\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing academic unit network_entity.")
+     * @FOS\QueryParam(name="limit", requirements="\d+", default="5", description="How many academic unit network_entity to return.")
      *
      * @FOS\View(
-     *  templateVar="academic_units"
+     *  templateVar="network_entities"
      * )
      *
      * @param Request               $request      the request object
@@ -77,7 +77,7 @@ class AcademicUnitController extends FOSRestController {
      *
      * @return array
      */
-    public function getAcademicUnitsAction(Request $request, ParamFetcherInterface $paramFetcher) {
+    public function getNetworkEntitiesAction(Request $request, ParamFetcherInterface $paramFetcher) {
         return $this->getApiController()->getAll($request, $paramFetcher);
     }
 
@@ -87,7 +87,7 @@ class AcademicUnitController extends FOSRestController {
      * @ApiDoc(
      *   resource = true,
      *   description = "Gets a network admin for a given id",
-     *   output = "CertUnlp\NgenBundle\Entity\AcademicUnit",
+     *   output = "CertUnlp\NgenBundle\Entity\Network\NetworkEntity",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     404 = "Returned when the network is not found"
@@ -98,15 +98,15 @@ class AcademicUnitController extends FOSRestController {
      *
      * @return array
      * @FOS\View(
-     *  templateVar="academic_unit"
+     *  templateVar="network_entity"
      * )
      * @throws NotFoundHttpException when network not exist
-     * @ParamConverter("academic_unit", class="CertUnlpNgenBundle:AcademicUnit")
-     * @FOS\Get("/academic_unit/{slug}")
+     * @ParamConverter("network_entity", class="CertUnlpNgenBundle:NetworkEntity")
+     * @FOS\Get("/network_entity/{slug}")
      *         
      */
-    public function getAcademicUnitAction(AcademicUnit $academic_unit) {
-        return $academic_unit;
+    public function getNetworkEntityAction(NetworkEntity $network_entity) {
+        return $network_entity;
     }
 
     /**
@@ -122,13 +122,13 @@ class AcademicUnitController extends FOSRestController {
      *   }
      * )
      *
-     * @FOS\Post("/academic_unit")
+     * @FOS\Post("/network_entity")
 
      * @param Request $request the request object
      *
      * @return FormTypeInterface|View
      */
-    public function postAcademicUnitAction(Request $request) {
+    public function postNetworkEntityAction(Request $request) {
         return $this->getApiController()->post($request);
     }
 
@@ -143,7 +143,7 @@ class AcademicUnitController extends FOSRestController {
      *     400 = "Returned when the form has errors"
      *   }
      * )
-     * @FOS\Patch("/academic_unit/{slug}")
+     * @FOS\Patch("/network_entity/{slug}")
      * @param Request $request the request object
      * @param int     $id      the network id
      *
@@ -151,8 +151,8 @@ class AcademicUnitController extends FOSRestController {
      *
      * @throws NotFoundHttpException when network not exist
      */
-    public function patchAcademicUnitAction(Request $request, AcademicUnit $academic_unit) {
-        return $this->getApiController()->patch($request, $academic_unit, true);
+    public function patchNetworkEntityAction(Request $request, NetworkEntity $network_entity) {
+        return $this->getApiController()->patch($request, $network_entity, true);
     }
 
     /**
@@ -166,7 +166,7 @@ class AcademicUnitController extends FOSRestController {
      *     400 = "Returned when the form has errors"
      *   }
      * )
-     * @FOS\Patch("/academic_unit/{slug}")
+     * @FOS\Patch("/network_entity/{slug}")
      * @param Request $request the request object
      * @param int     $id      the network id
      *
@@ -174,34 +174,8 @@ class AcademicUnitController extends FOSRestController {
      *
      * @throws NotFoundHttpException when network not exist
      */
-    public function patchAcademicUnitBySlugAction(Request $request, AcademicUnit $academic_unit) {
-        return $this->getApiController()->patch($request, $academic_unit);
-    }
-
-    /**
-     * Update existing network from the submitted data or create a new network at a specific location.
-     *
-     * @ApiDoc(
-     *   resource = true,
-     *   input = "CertUnlp\NgenBundle\Form\NetworkType",
-     *   statusCodes = {
-     *     204 = "Returned when successful",
-     *     400 = "Returned when the form has errors"
-     *   }
-     * )
-     *
-     *
-     * @param Request $request the request object
-     * @param int     $id      the network id
-     *
-     * @return FormTypeInterface|View
-     *
-     * @throws NotFoundHttpException when network not exist
-     * @FOS\Patch("/academic_unit/{slug}/activate")
-     */
-    public function patchAcademicUnitActivateAction(Request $request, AcademicUnit $academic_unit) {
-
-        return $this->getApiController()->activate($request, $academic_unit);
+    public function patchNetworkEntityBySlugAction(Request $request, NetworkEntity $network_entity) {
+        return $this->getApiController()->patch($request, $network_entity);
     }
 
     /**
@@ -223,11 +197,37 @@ class AcademicUnitController extends FOSRestController {
      * @return FormTypeInterface|View
      *
      * @throws NotFoundHttpException when network not exist
-     * @FOS\Patch("/academic_unit/{slug}/desactivate")
+     * @FOS\Patch("/network_entity/{slug}/activate")
      */
-    public function patchAcademicUnitDesactivateAction(Request $request, AcademicUnit $academic_unit) {
+    public function patchNetworkEntityActivateAction(Request $request, NetworkEntity $network_entity) {
 
-        return $this->getApiController()->desactivate($request, $academic_unit);
+        return $this->getApiController()->activate($request, $network_entity);
+    }
+
+    /**
+     * Update existing network from the submitted data or create a new network at a specific location.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   input = "CertUnlp\NgenBundle\Form\NetworkType",
+     *   statusCodes = {
+     *     204 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     *
+     * @param Request $request the request object
+     * @param int     $id      the network id
+     *
+     * @return FormTypeInterface|View
+     *
+     * @throws NotFoundHttpException when network not exist
+     * @FOS\Patch("/network_entity/{slug}/desactivate")
+     */
+    public function patchNetworkEntityDesactivateAction(Request $request, NetworkEntity $network_entity) {
+
+        return $this->getApiController()->desactivate($request, $network_entity);
     }
 
 }
