@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace CertUnlp\NgenBundle\Controller;
+namespace CertUnlp\NgenBundle\Controller\Api\Network;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -18,18 +18,18 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use CertUnlp\NgenBundle\Form\IncidentTypeType;
-use CertUnlp\NgenBundle\Entity\IncidentType;
+use CertUnlp\NgenBundle\Form\NetworkType;
+use CertUnlp\NgenBundle\Entity\Network\Network;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations as FOS;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use CertUnlp\NgenBundle\Exception\InvalidFormException;
 
-class IncidentTypeController extends FOSRestController {
+class NetworkController extends FOSRestController {
 
     public function getApiController() {
 
-        return $this->container->get('cert_unlp.ngen.incident.type.api.controller');
+        return $this->container->get('cert_unlp.ngen.network.api.controller');
     }
 
     /**
@@ -54,7 +54,7 @@ class IncidentTypeController extends FOSRestController {
     }
 
     /**
-     * List all incident types.
+     * List all networks.
      *
      * @ApiDoc(
      *   resource = true,
@@ -63,11 +63,11 @@ class IncidentTypeController extends FOSRestController {
      *   }
      * )
      *
-     * @FOS\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing incident types.")
-     * @FOS\QueryParam(name="limit", requirements="\d+", default="5", description="How many incident types to return.")
+     * @FOS\RequestParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing networks.")
+     * @FOS\RequestParam(name="limit", requirements="\d+", default="5", description="How many networks to return.")
      *
      * @FOS\View(
-     *  templateVar="incident_types"
+     *  templateVar="networks"
      * )
      *
      * @param Request               $request      the request object
@@ -75,7 +75,7 @@ class IncidentTypeController extends FOSRestController {
      *
      * @return array
      */
-    public function getIncidentTypesAction(Request $request, ParamFetcherInterface $paramFetcher) {
+    public function getNetworksAction(Request $request, ParamFetcherInterface $paramFetcher) {
         return $this->getApiController()->getAll($request, $paramFetcher);
     }
 
@@ -84,8 +84,8 @@ class IncidentTypeController extends FOSRestController {
      *
      * @ApiDoc(
      *   resource = true,
-     *   description = "Gets a network admin for a given id",
-     *   output = "CertUnlp\NgenBundle\Entity\IncidentType",
+     *   description = "Gets a Network for a given host address",
+     *   output = "CertUnlp\NgenBundle\Entity\Network\Network",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     404 = "Returned when the network is not found"
@@ -95,14 +95,48 @@ class IncidentTypeController extends FOSRestController {
      * @param int     $id      the network id
      *
      * @return array
-     * @FOS\View(
-     *  templateVar="incident_type"
-     * )
+     *
      * @throws NotFoundHttpException when network not exist
-     *         
+     *
+     * @FOS\Get("/networks/host/{ip}",requirements={"ip"="^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$"} )
+     * 
+     * @FOS\View(
+     *  templateVar="network"
+     * )     
+     *  @ParamConverter("network", class="CertUnlpNgenBundle:Network", options={"repository_method" = "findByHostAddress"})
      */
-    public function getTypeAction(IncidentType $incident_type) {
-        return $incident_type;
+    public function getNetworkHostAction(Network $network) {
+        return $network;
+    }
+
+    /**
+     * Gets a Network for a given id.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Gets a Network for a given id",
+     *   output = "CertUnlp\NgenBundle\Entity\Network\Network",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when the network is not found"
+     *   }
+     * )
+     *
+     * @param int     $id      the network id
+     *
+     * @return array
+     *
+     * @throws NotFoundHttpException when network not exist
+     *
+     * @FOS\Get("/networks/{ip}/{ipMask}",requirements={"ip"="^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$","ipMask"="^[1-3]?[0-9]$"} )
+     * 
+     * @FOS\View(
+     *  templateVar="network"
+     * )     
+     *  @ParamConverter("network", class="CertUnlpNgenBundle:Network", options={"repository_method" = "findOneBy"})
+     */
+    public function getNetworkAction(Network $network) {
+        return $network;
     }
 
     /**
@@ -118,13 +152,14 @@ class IncidentTypeController extends FOSRestController {
      *   }
      * )
      *
-     * @FOS\Post("/types")
-
+     * @FOS\View(
+     *  templateVar = "network"
+     * )
      * @param Request $request the request object
      *
      * @return FormTypeInterface|View
      */
-    public function postIncidentTypeAction(Request $request) {
+    public function postNetworkAction(Request $request) {
         return $this->getApiController()->post($request);
     }
 
@@ -139,39 +174,23 @@ class IncidentTypeController extends FOSRestController {
      *     400 = "Returned when the form has errors"
      *   }
      * )
-     * @FOS\Patch("/types/{slug}")
-     * @param Request $request the request object
-     * @param int     $id      the network id
      *
-     * @return FormTypeInterface|View
-     *
-     * @throws NotFoundHttpException when network not exist
-     */
-    public function patchIncidentTypeAction(Request $request, IncidentType $incident_type) {
-        return $this->getApiController()->patch($request, $incident_type, true);
-    }
-
-    /**
-     * Update existing network from the submitted data or create a new network at a specific location.
-     *
-     * @ApiDoc(
-     *   resource = true,
-     *   input = "CertUnlp\NgenBundle\Form\NetworkType",
-     *   statusCodes = {
-     *     204 = "Returned when successful",
-     *     400 = "Returned when the form has errors"
-     *   }
+     * @FOS\View(
+     *  templateVar = "network"
      * )
-     * @FOS\Patch("/types/{slug}")
+     *
      * @param Request $request the request object
      * @param int     $id      the network id
      *
      * @return FormTypeInterface|View
      *
      * @throws NotFoundHttpException when network not exist
+     * @FOS\Patch("/networks/{ip}/{ipMask}", requirements={"ip"="^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$","ipMask"="^[1-3]?[0-9]$"} )
+     *
+     * @ParamConverter("network", class="CertUnlpNgenBundle:Network", options={"repository_method" = "findOneBy"})
      */
-    public function patchIncidentTypeBySlugAction(Request $request, IncidentType $incident_type) {
-        return $this->getApiController()->patch($request, $incident_type,true);
+    public function patchNetworkAction(Request $request, Network $network) {
+        return $this->getApiController()->patch($request, $network, true);
     }
 
     /**
@@ -193,11 +212,16 @@ class IncidentTypeController extends FOSRestController {
      * @return FormTypeInterface|View
      *
      * @throws NotFoundHttpException when network not exist
-     * @FOS\Patch("/types/{slug}/activate")
+     * 
+     * @FOS\Patch("/networks/{ip}/{ipMask}/activate", requirements={"ip"="^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$","ipMask"="^[1-3]?[0-9]$"} )
+     * @FOS\View(
+     *  templateVar = "network"
+     * )
+     * @ParamConverter("network", class="CertUnlpNgenBundle:Network", options={"repository_method" = "findOneBy"})
      */
-    public function patchIncidentTypeActivateAction(Request $request, IncidentType $incident_type) {
+    public function patchNetworkActivateAction(Request $request, Network $network) {
 
-        return $this->getApiController()->activate($request, $incident_type);
+        return $this->getApiController()->activate($request, $network);
     }
 
     /**
@@ -219,11 +243,16 @@ class IncidentTypeController extends FOSRestController {
      * @return FormTypeInterface|View
      *
      * @throws NotFoundHttpException when network not exist
-     * @FOS\Patch("/types/{slug}/desactivate")
+     * 
+     * @FOS\Patch("/networks/{ip}/{ipMask}/desactivate", requirements={"ip"="^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$","ipMask"="^[1-3]?[0-9]$"} )
+     * @FOS\View(
+     *  templateVar = "network"
+     * )
+     * @ParamConverter("network", class="CertUnlpNgenBundle:Network", options={"repository_method" = "findOneBy"})
      */
-    public function patchIncidentTypeDesactivateAction(Request $request, IncidentType $incident_type) {
+    public function patchNetworkDesactivateAction(Request $request, Network $network) {
 
-        return $this->getApiController()->desactivate($request, $incident_type);
+        return $this->getApiController()->desactivate($request, $network);
     }
 
 }

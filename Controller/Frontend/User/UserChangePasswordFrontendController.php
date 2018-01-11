@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace CertUnlp\NgenBundle\Controller;
+namespace CertUnlp\NgenBundle\Controller\Frontend\User;
 
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;

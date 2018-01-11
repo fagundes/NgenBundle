@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace CertUnlp\NgenBundle\Controller;
+namespace CertUnlp\NgenBundle\Controller\Frontend;
 
 use Symfony\Component\HttpFoundation\Request;
 use CertUnlp\NgenBundle\Model\IncidentInterface;

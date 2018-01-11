@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace CertUnlp\NgenBundle\Controller;
+namespace CertUnlp\NgenBundle\Controller\Api\Incident;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -18,18 +18,18 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use CertUnlp\NgenBundle\Form\IncidentFeedType;
-use CertUnlp\NgenBundle\Entity\IncidentFeed;
+use CertUnlp\NgenBundle\Form\IncidentTypeType;
+use CertUnlp\NgenBundle\Entity\IncidentType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations as FOS;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use CertUnlp\NgenBundle\Exception\InvalidFormException;
 
-class IncidentFeedController extends FOSRestController {
+class IncidentTypeController extends FOSRestController {
 
     public function getApiController() {
 
-        return $this->container->get('cert_unlp.ngen.incident.feed.api.controller');
+        return $this->container->get('cert_unlp.ngen.incident.type.api.controller');
     }
 
     /**
@@ -54,7 +54,7 @@ class IncidentFeedController extends FOSRestController {
     }
 
     /**
-     * List all incident feeds.
+     * List all incident types.
      *
      * @ApiDoc(
      *   resource = true,
@@ -63,13 +63,11 @@ class IncidentFeedController extends FOSRestController {
      *   }
      * )
      *
-     * @FOS\Get("/feeds")
-
-     * @FOS\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing incident feeds.")
-     * @FOS\QueryParam(name="limit", requirements="\d+", default="5", description="How many incident feeds to return.")
+     * @FOS\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing incident types.")
+     * @FOS\QueryParam(name="limit", requirements="\d+", default="5", description="How many incident types to return.")
      *
      * @FOS\View(
-     *  templateVar="incident_feeds"
+     *  templateVar="incident_types"
      * )
      *
      * @param Request               $request      the request object
@@ -77,7 +75,7 @@ class IncidentFeedController extends FOSRestController {
      *
      * @return array
      */
-    public function getIncidentFeedsAction(Request $request, ParamFetcherInterface $paramFetcher) {
+    public function getIncidentTypesAction(Request $request, ParamFetcherInterface $paramFetcher) {
         return $this->getApiController()->getAll($request, $paramFetcher);
     }
 
@@ -87,7 +85,7 @@ class IncidentFeedController extends FOSRestController {
      * @ApiDoc(
      *   resource = true,
      *   description = "Gets a network admin for a given id",
-     *   output = "CertUnlp\NgenBundle\Entity\IncidentFeed",
+     *   output = "CertUnlp\NgenBundle\Entity\IncidentType",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     404 = "Returned when the network is not found"
@@ -98,15 +96,13 @@ class IncidentFeedController extends FOSRestController {
      *
      * @return array
      * @FOS\View(
-     *  templateVar="incident_feed"
+     *  templateVar="incident_type"
      * )
      * @throws NotFoundHttpException when network not exist
-     * @ParamConverter("incident_feed", class="CertUnlpNgenBundle:IncidentFeed")
-     * @FOS\Get("/feeds/{slug}")
      *         
      */
-    public function getIncidentFeedAction(IncidentFeed $incident_feed) {
-        return $incident_feed;
+    public function getTypeAction(IncidentType $incident_type) {
+        return $incident_type;
     }
 
     /**
@@ -122,13 +118,13 @@ class IncidentFeedController extends FOSRestController {
      *   }
      * )
      *
-     * @FOS\Post("/feeds")
+     * @FOS\Post("/types")
 
      * @param Request $request the request object
      *
      * @return FormTypeInterface|View
      */
-    public function postIncidentFeedAction(Request $request) {
+    public function postIncidentTypeAction(Request $request) {
         return $this->getApiController()->post($request);
     }
 
@@ -143,7 +139,7 @@ class IncidentFeedController extends FOSRestController {
      *     400 = "Returned when the form has errors"
      *   }
      * )
-     * @FOS\Patch("/feeds/{slug}")
+     * @FOS\Patch("/types/{slug}")
      * @param Request $request the request object
      * @param int     $id      the network id
      *
@@ -151,8 +147,8 @@ class IncidentFeedController extends FOSRestController {
      *
      * @throws NotFoundHttpException when network not exist
      */
-    public function patchIncidentFeedAction(Request $request, IncidentFeed $incident_feed) {
-        return $this->getApiController()->patch($request, $incident_feed, true);
+    public function patchIncidentTypeAction(Request $request, IncidentType $incident_type) {
+        return $this->getApiController()->patch($request, $incident_type, true);
     }
 
     /**
@@ -166,7 +162,7 @@ class IncidentFeedController extends FOSRestController {
      *     400 = "Returned when the form has errors"
      *   }
      * )
-     * @FOS\Patch("/feeds/{slug}")
+     * @FOS\Patch("/types/{slug}")
      * @param Request $request the request object
      * @param int     $id      the network id
      *
@@ -174,34 +170,8 @@ class IncidentFeedController extends FOSRestController {
      *
      * @throws NotFoundHttpException when network not exist
      */
-    public function patchIncidentFeedBySlugAction(Request $request, IncidentFeed $incident_feed) {
-        return $this->getApiController()->patch($request, $incident_feed);
-    }
-
-    /**
-     * Update existing network from the submitted data or create a new network at a specific location.
-     *
-     * @ApiDoc(
-     *   resource = true,
-     *   input = "CertUnlp\NgenBundle\Form\NetworkType",
-     *   statusCodes = {
-     *     204 = "Returned when successful",
-     *     400 = "Returned when the form has errors"
-     *   }
-     * )
-     *
-     *
-     * @param Request $request the request object
-     * @param int     $id      the network id
-     *
-     * @return FormTypeInterface|View
-     *
-     * @throws NotFoundHttpException when network not exist
-     * @FOS\Patch("/feeds/{slug}/activate")
-     */
-    public function patchIncidentFeedActivateAction(Request $request, IncidentFeed $incident_feed) {
-
-        return $this->getApiController()->activate($request, $incident_feed);
+    public function patchIncidentTypeBySlugAction(Request $request, IncidentType $incident_type) {
+        return $this->getApiController()->patch($request, $incident_type,true);
     }
 
     /**
@@ -223,11 +193,37 @@ class IncidentFeedController extends FOSRestController {
      * @return FormTypeInterface|View
      *
      * @throws NotFoundHttpException when network not exist
-     * @FOS\Patch("/feeds/{slug}/desactivate")
+     * @FOS\Patch("/types/{slug}/activate")
      */
-    public function patchIncidentFeedDesactivateAction(Request $request, IncidentFeed $incident_feed) {
+    public function patchIncidentTypeActivateAction(Request $request, IncidentType $incident_type) {
 
-        return $this->getApiController()->desactivate($request, $incident_feed);
+        return $this->getApiController()->activate($request, $incident_type);
+    }
+
+    /**
+     * Update existing network from the submitted data or create a new network at a specific location.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   input = "CertUnlp\NgenBundle\Form\NetworkType",
+     *   statusCodes = {
+     *     204 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     *
+     * @param Request $request the request object
+     * @param int     $id      the network id
+     *
+     * @return FormTypeInterface|View
+     *
+     * @throws NotFoundHttpException when network not exist
+     * @FOS\Patch("/types/{slug}/desactivate")
+     */
+    public function patchIncidentTypeDesactivateAction(Request $request, IncidentType $incident_type) {
+
+        return $this->getApiController()->desactivate($request, $incident_type);
     }
 
 }

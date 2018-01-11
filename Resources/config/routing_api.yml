@@ -8,61 +8,61 @@
 #cert_ngen_incident_report_api:
 #    type: rest
 #    prefix: /v2/incidents/internals
-#    resource: 'CertUnlp\NgenBundle\Controller\IncidentReportController'
+#    resource: 'CertUnlp\NgenBundle\Controller\Api\IncidentReportController'
 #    name_prefix:  api_1_
     
 #cert_ngen_incident_api:
 #    type: rest
 #    prefix: /v1
-#    resource: 'CertUnlp\NgenBundle\Controller\IncidentController'
+#    resource: 'CertUnlp\NgenBundle\Controller\Api\IncidentController'
 #    name_prefix:  api_1_
 
 cert_ngen_internal_incident_api:
     type: rest
     prefix: /v2/incidents
-    resource: 'CertUnlp\NgenBundle\Controller\InternalIncidentController'
+    resource: 'CertUnlp\NgenBundle\Controller\Api\Incident\InternalIncidentController'
     name_prefix:  api_2_
 
 cert_ngen_external_incident_api:
     type: rest
     prefix: /v2/incidents
-    resource: 'CertUnlp\NgenBundle\Controller\ExternalIncidentController'
+    resource: 'CertUnlp\NgenBundle\Controller\Api\Incident\ExternalIncidentController'
     name_prefix:  api_2_
 
 cert_ngen_incident_feed_api:
     type: rest
     prefix: /v2/incidents
-    resource: 'CertUnlp\NgenBundle\Controller\IncidentFeedController'
+    resource: 'CertUnlp\NgenBundle\Controller\Api\Incident\IncidentFeedController'
     name_prefix:  api_2_
 
 cert_ngen_incident_state_api:
     type: rest
     prefix: /v2/incidents
-    resource: 'CertUnlp\NgenBundle\Controller\IncidentStateController'
+    resource: 'CertUnlp\NgenBundle\Controller\Api\Incident\IncidentStateController'
     name_prefix:  api_2_
 
 cert_ngen_incident_type_api:
     type: rest
     prefix: /v2/incidents
-    resource: 'CertUnlp\NgenBundle\Controller\IncidentTypeController'
+    resource: 'CertUnlp\NgenBundle\Controller\Api\Incident\IncidentTypeController'
     name_prefix:  api_2_
 
 cert_ngen_incident_report_api:
     type: rest
     parent: cert_ngen_incident_type_api
-    resource: 'CertUnlp\NgenBundle\Controller\IncidentReportController'
+    resource: 'CertUnlp\NgenBundle\Controller\Api\Incident\IncidentReportController'
     name_prefix:  api_2_
     
 cert_ngen_user_api:
     type: rest
     prefix: /v1
-    resource: 'CertUnlp\NgenBundle\Controller\UserController'
+    resource: 'CertUnlp\NgenBundle\Controller\Api\User\UserController'
     name_prefix:  api_2_
 
 cert_ngen_network_entity_api:
     type: rest
     prefix: /v2
-    resource: 'CertUnlp\NgenBundle\Controller\NetworkEntityController'
+    resource: 'CertUnlp\NgenBundle\Controller\Api\Network\NetworkEntityController'
     name_prefix:  api_2_
 
 fos_comment_api:
@@ -75,13 +75,13 @@ fos_comment_api:
 cert_ngen_network_api:
     type: rest
     prefix: /v1
-    resource: 'CertUnlp\NgenBundle\Controller\NetworkController'
+    resource: 'CertUnlp\NgenBundle\Controller\Api\Network\NetworkController'
     name_prefix:  api_1_
 
 cert_ngen_network_admin_api:
     type: rest
     prefix: /v2
-    resource: 'CertUnlp\NgenBundle\Controller\NetworkAdminController'
+    resource: 'CertUnlp\NgenBundle\Controller\Api\Network\NetworkAdminController'
     name_prefix:  api_2_
 #
 #NelmioApiDocBundle:
