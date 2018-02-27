@@ -32,15 +32,15 @@ class CloseOldIncidentsCommand extends ContainerAwareCommand {
         $output->writeln('[incidents]: Starting.');
         $output->writeln('[incidents]: Closing old incidents...');
         $output->writeln('[incidents]: Internals...');
-        $closedInternalIncidents = $this->getContainer()->get('cert_unlp.ngen.incident.internal.handler')->closeOldIncidents($input->getOption('days'));
+        $closedIncidents = $this->getContainer()->get('cert_unlp.ngen.incident.internal.handler')->closeOldIncidents($input->getOption('days'));
         $output->writeln('[incidents]: Externals...');
-        $closedExternalIncidents = $this->getContainer()->get('cert_unlp.ngen.incident.external.handler')->closeOldIncidents($input->getOption('days'));
+        $closedIncidents = $this->getContainer()->get('cert_unlp.ngen.incident.external.handler')->closeOldIncidents($input->getOption('days'));
 
-        $output->writeln('[incidents]: Closed internal incidents: ' . count($closedInternalIncidents));
-        $output->writeln('[incidents]: Closed external incidents: ' . count($closedExternalIncidents));
+        $output->writeln('[incidents]: Closed internal incidents: ' . count($closedIncidents));
+        $output->writeln('[incidents]: Closed external incidents: ' . count($closedIncidents));
 //        if ($output->isVerbose()) {
 //            foreach ($closedIncidents as $id => $incident) {
-//                $output->writeln('[incidents]: #' . $id . ' hostAdress: ' . $incident['hostAddress'] . ' type: ' . $incident['type'] . ' date: ' . $incident['hostAddress'] . ' lastTimeDetected:' . $incident['lastTimeDetected'] . ' openDays:' . $incident['openDays']);
+//                $output->writeln('[incidents]: #' . $id . ' hostAdress: ' . $incident['ip'] . ' type: ' . $incident['type'] . ' date: ' . $incident['ip'] . ' lastTimeDetected:' . $incident['lastTimeDetected'] . ' openDays:' . $incident['openDays']);
 //            }
 //        }
         $output->writeln('[incidents]: Done.');

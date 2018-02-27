@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use CertUnlp\NgenBundle\Entity\Incident\Incident;
 
 /**
  * IncidentReport
@@ -260,11 +261,11 @@ class IncidentReport {
     /**
      * Add incident
      *
-     * @param \CertUnlp\NgenBundle\Entity\InternalIncident $incident
+     * @param \CertUnlp\NgenBundle\Entity\Incident $incident
      *
      * @return IncidentReport
      */
-    public function addIncident(\CertUnlp\NgenBundle\Entity\InternalIncident $incident) {
+    public function addIncident(Incident $incident) {
         $this->incidents[] = $incident;
 
         return $this;
@@ -273,9 +274,9 @@ class IncidentReport {
     /**
      * Remove incident
      *
-     * @param \CertUnlp\NgenBundle\Entity\InternalIncident $incident
+     * @param \CertUnlp\NgenBundle\Entity\Incident $incident
      */
-    public function removeIncident(\CertUnlp\NgenBundle\Entity\InternalIncident $incident) {
+    public function removeIncident(Incident $incident) {
         $this->incidents->removeElement($incident);
     }
 

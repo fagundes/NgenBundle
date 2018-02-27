@@ -73,7 +73,7 @@ class DelegatorChain {
     public function __call($name, $arguments) {
         $delegation_method = $this->explodeDelegationMethod($name);
         if ($delegation_method) {
-            $this->doDelegation($delegation_method, $arguments);
+            $this->doDelegation($delegation_method, $arguments[0]);
         } else {
             throw new Exception("DelegatorChain Exeption: The method " . $name . " is not a delegation method.");
         }

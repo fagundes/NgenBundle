@@ -103,7 +103,7 @@ class NetworkController extends FOSRestController {
      * @FOS\View(
      *  templateVar="network"
      * )     
-     *  @ParamConverter("network", class="CertUnlpNgenBundle:Network", options={"repository_method" = "findByHostAddress"})
+     *  @ParamConverter("network", class="CertUnlpNgenBundle:Network", options={"repository_method" = "findByIp"})
      */
     public function getNetworkHostAction(Network $network) {
         return $network;

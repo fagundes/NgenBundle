@@ -16,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
+use CertUnlp\NgenBundle\Entity\Incident\Incident;
+use CertUnlp\NgenBundle\Entity\IncidentReport;
 
 /**
  * IncidentType
@@ -218,11 +220,11 @@ class IncidentType {
     /**
      * Add incident
      *
-     * @param \CertUnlp\NgenBundle\Entity\InternalIncident $incident
+     * @param Incident $incident
      *
      * @return IncidentType
      */
-    public function addIncident(\CertUnlp\NgenBundle\Entity\InternalIncident $incident) {
+    public function addIncident(Incident $incident) {
         $this->incidents[] = $incident;
 
         return $this;
@@ -231,9 +233,9 @@ class IncidentType {
     /**
      * Remove incident
      *
-     * @param \CertUnlp\NgenBundle\Entity\InternalIncident $incident
+     * @param \CertUnlp\NgenBundle\Entity\Incident $incident
      */
-    public function removeIncident(\CertUnlp\NgenBundle\Entity\InternalIncident $incident) {
+    public function removeIncident(Incident $incident) {
         $this->incidents->removeElement($incident);
     }
 
@@ -253,7 +255,7 @@ class IncidentType {
      *
      * @return IncidentType
      */
-    public function addReport(\CertUnlp\NgenBundle\Entity\IncidentReport $report) {
+    public function addReport(IncidentReport $report) {
         $this->reports[] = $report;
 
         return $this;
@@ -262,9 +264,9 @@ class IncidentType {
     /**
      * Remove report
      *
-     * @param \CertUnlp\NgenBundle\Entity\IncidentReport $report
+     * @param IncidentReport $report
      */
-    public function removeReport(\CertUnlp\NgenBundle\Entity\IncidentReport $report) {
+    public function removeReport(IncidentReport $report) {
         $this->reports->removeElement($report);
     }
 

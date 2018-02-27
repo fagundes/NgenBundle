@@ -16,7 +16,7 @@ fos_elastica:
                     properties:
                         id:
                             type: integer
-                        hostAddress:
+                        ip:
                             type: ip
                         date: 
                             type: date
@@ -113,14 +113,14 @@ fos_elastica:
                         # listener and finder are not supported by
                         # propel and should be removed
                         driver: orm
-                        model: CertUnlp\NgenBundle\Entity\InternalIncident
+                        model: CertUnlp\NgenBundle\Entity\Incident\Incident
                         provider: ~
                         finder: ~       
                 external:
                     properties:
                         id:
                             type: integer
-                        hostAddress:
+                        ip:
                             type: ip
                         date: 
                             type: date
@@ -191,7 +191,7 @@ fos_elastica:
                         # listener and finder are not supported by
                         # propel and should be removed
                         driver: orm
-                        model: CertUnlp\NgenBundle\Entity\ExternalIncident
+                        model: CertUnlp\NgenBundle\Entity\Incident\Incident
                         provider: ~
                         finder: ~
         networks:

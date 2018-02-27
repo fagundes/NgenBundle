@@ -21,11 +21,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class NetworkRepository extends EntityRepository {
 
-    public function findByHostAddress($address) {
+    public function findByIp($address) {
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
         $qb->select('n')
-                ->from('CertUnlpNgenBundle:Network', 'n')
+                ->from('CertUnlpNgenBundle:Network\Network', 'n')
                 ->where($qb->expr()->eq("BIT_AND(INET_ATON(:address),n.numericIpMask)", "n.numericIp"))
                 ->andWhere('n.isActive = true')
                 ->orderBy("n.ipMask", "DESC");
@@ -34,6 +34,7 @@ class NetworkRepository extends EntityRepository {
         $qb->setParameter('address', $ip);
 
         $results = $qb->getQuery()->getResult();
+        var_dump($results);die;
 
         return $results ? $results[0] : null;
     }

@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Gedmo\Sluggable\Util as Sluggable;
 
-class InternalIncidentListener implements ContainerAwareInterface {
+class IncidentListener implements ContainerAwareInterface {
 
     public $delegator_chain;
 
@@ -81,7 +81,7 @@ class InternalIncidentListener implements ContainerAwareInterface {
             'type' => $convertible->getType(),
             'feed' => $convertible->getFeed(),
             'reporter' => $incidentReporter->getId(),
-            'hostAddress' => $convertible->getHostAddress(),
+            'ip' => $convertible->getIp(),
             'evidence_file' => $UploadedFile,
             'sendReport' => true
         ];
@@ -138,8 +138,8 @@ class InternalIncidentListener implements ContainerAwareInterface {
             $thread->setId($id);
             $incident->setCommentThread($thread);
             $thread->setIncident($incident);
-            $uri = $this->container->get('router')->generate('cert_unlp_ngen_internal_incident_frontend_edit_incident', array(
-                'hostAddress' => $incident->getHostAddress(),
+            $uri = $this->container->get('router')->generate('cert_unlp_ngen_incident_frontend_edit_incident', array(
+                'ip' => $incident->getIp(),
                 'date' => $incident->getDate()->format('Y-m-d'),
                 'type' => $incident->getType()->getSlug()
             ));
@@ -151,15 +151,16 @@ class InternalIncidentListener implements ContainerAwareInterface {
     }
 
     public function slugUpdate($incident) {
-        $incident->setSlug(Sluggable\Urlizer::urlize($incident->getHostAddress() . " " . $incident->getType()->getSlug() . " " . $incident->getDate()->format('Y-m-d'), '_'));
+        $incident->setSlug(Sluggable\Urlizer::urlize($incident->getIp() . " " . $incident->getType()->getSlug() . " " . $incident->getDate()->format('Y-m-d'), '_'));
     }
 
     public function networkUpdate($incident, $event) {
 //        if (!$incident->isClosed()) {
+        var_dump($incident);die;
         $entityManager = $event->getEntityManager();
         $network_handler = $this->container->get('cert_unlp.ngen.network.handler');
         $network = $incident->getNetwork();
-        $newNetwork = $network_handler->getByHostAddress($incident->getHostAddress());
+        $newNetwork = $network_handler->getByIp($incident->getIp());
         if ($network != null && !$incident->isClosed()) {
             if (!$network->equals($newNetwork)) {
                 $incident->setNetwork($newNetwork);

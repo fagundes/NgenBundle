@@ -8,8 +8,8 @@
  */
 var IncidentApi = ApiClient.extend({
     config: function () {
-//        this.api.add("incidents", {isSingle: true, stripTrailingSlash: true})
-//        this.defaultChannel = this.api.incidents;
+        this.api.add("incidents", {isSingle: true, stripTrailingSlash: true})
+        this.defaultChannel = this.api.incidents;
         this.defaultChannel.add("states", {stripTrailingSlash: true});
         this.defaultChannel.add("report", {stripTrailingSlash: true});
         $.subscribe('/cert_unlp/incident/state/change', $.proxy(this.changeState, this));

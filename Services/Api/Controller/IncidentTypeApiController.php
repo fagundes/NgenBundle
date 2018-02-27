@@ -19,9 +19,8 @@ use CertUnlp\NgenBundle\Services\Api\Controller\ApiController;
 
 class IncidentTypeApiController extends ApiController {
 
-    public function __construct($handler, $viewHandler, $view, $markdown_path) {
+    public function __construct($handler, $viewHandler, $view) {
         parent::__construct($handler, $viewHandler, $view);
-        $this->markdown_path = $markdown_path;
     }
 
     /**

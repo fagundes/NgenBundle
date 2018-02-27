@@ -18,7 +18,7 @@ use CertUnlp\NgenBundle\Services\Delegator\DelegatorChain;
  *
  * @author demyen
  */
-class ExternalIncidentDelegatorChain extends DelegatorChain {
+class IncidentDelegatorChain extends DelegatorChain {
 
     public function doDelegation($function, $arguments) {
         parent::doDelegation($function, $arguments[0]);

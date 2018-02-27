@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace CertUnlp\NgenBundle\Entity\Listener;
+namespace CertUnlp\NgenBundle\Entity\Incident\Host\Listener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 //use Doctrine\ORM\Event\PreFlushEventArgs;
@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Gedmo\Sluggable\Util as Sluggable;
 
-class ExternalIncidentListener implements ContainerAwareInterface {
+class HostInternalListener implements ContainerAwareInterface {
 
     public $delegator_chain;
 
@@ -57,39 +57,41 @@ class ExternalIncidentListener implements ContainerAwareInterface {
 //    public function preFlushHandler(IncidentInterface $incident, PreFlushEventArgs $event) {
 //        $this->delegator_chain->preFlushDelegation($incident);
 //    }
-//    public function onConvertToIncident(ConvertToIncidentEvent $event) {
-//        $convertible = $event->getConvertible();
-//        $entityManager = $this->container->get('doctrine')->getManager();
-//        $incidentType = $entityManager->getRepository('CertUnlpNgenBundle:IncidentType')->findOneBySlug($convertible->getType());
-//        $incidentFeed = $entityManager->getRepository('CertUnlpNgenBundle:IncidentFeed')->findOneBySlug($convertible->getFeed());
-//        if ($convertible->getReporter() == 'random') {
-//
-//            $incidentReporter = $entityManager->getRepository('CertUnlpNgenBundle:User')->findOneRandom();
-//        } else {
-//            $incidentReporter = $entityManager->getRepository('CertUnlpNgenBundle:User')->findOneBySlug($convertible->getReporter());
-//        }
-//
-//        if (!$incidentType || !$incidentFeed || !$incidentReporter) {
-//            return;
-//        }
-//
-//        $UploadedFile = new File(realpath($convertible->getEvidenceFile()));
-//
-//        $parameters = [
-//            'type' => $convertible->getType(),
-//            'feed' => $convertible->getFeed(),
-//            'reporter' => $incidentReporter->getId(),
-//            'hostAddress' => $convertible->getHostAddress(),
-//            'evidence_file' => $UploadedFile,
-//            'sendReport' => true
-//        ];
-//
-//        try {
-//            $this->container->get('cert_unlp.ngen.incident.external.handler')->post($parameters, false);
-//        } catch (InvalidFormException $exc) {
-//            return;
-//        }
-//    }
+
+    public function onConvertToIncident(ConvertToIncidentEvent $event) {
+        $convertible = $event->getConvertible();
+        $entityManager = $this->container->get('doctrine')->getManager();
+        $incidentType = $entityManager->getRepository('CertUnlpNgenBundle:IncidentType')->findOneBySlug($convertible->getType());
+//        echo $incidentType ? "" :  $convertible->getType()."\n";
+        $incidentFeed = $entityManager->getRepository('CertUnlpNgenBundle:IncidentFeed')->findOneBySlug($convertible->getFeed());
+        if ($convertible->getReporter() == 'random') {
+
+            $incidentReporter = $entityManager->getRepository('CertUnlpNgenBundle:User')->findOneRandom();
+        } else {
+            $incidentReporter = $entityManager->getRepository('CertUnlpNgenBundle:User')->findOneBySlug($convertible->getReporter());
+        }
+
+        if (!$incidentType || !$incidentFeed || !$incidentReporter) {
+            return;
+        }
+
+        $UploadedFile = new File(realpath($convertible->getEvidenceFile()));
+
+        $parameters = [
+            'type' => $convertible->getType(),
+            'feed' => $convertible->getFeed(),
+            'reporter' => $incidentReporter->getId(),
+            'ip' => $convertible->getIp(),
+            'evidence_file' => $UploadedFile,
+            'sendReport' => true
+        ];
+
+        try {
+            $this->container->get('cert_unlp.ngen.incident.internal.handler')->post($parameters, false);
+        } catch (InvalidFormException $exc) {
+            return;
+        }
+    }
 
     /** @ORM\PostPersist */
     public function postPersistHandler(IncidentInterface $incident, LifecycleEventArgs $event) {
@@ -123,7 +125,7 @@ class ExternalIncidentListener implements ContainerAwareInterface {
     public function incidentPrePersistUpdate($incident, $event) {
         $this->timestampsUpdate($incident);
         $this->slugUpdate($incident);
-//        $this->networkUpdate($incident, $event);
+        $this->networkUpdate($incident, $event);
         $this->stateUpdate($incident, $event);
         $this->feedUpdate($incident, $event);
     }
@@ -136,8 +138,8 @@ class ExternalIncidentListener implements ContainerAwareInterface {
             $thread->setId($id);
             $incident->setCommentThread($thread);
             $thread->setIncident($incident);
-            $uri = $this->container->get('router')->generate('cert_unlp_ngen_external_incident_frontend_edit_incident', array(
-                'hostAddress' => $incident->getHostAddress(),
+            $uri = $this->container->get('router')->generate('cert_unlp_ngen_incident_frontend_edit_incident', array(
+                'ip' => $incident->getIp(),
                 'date' => $incident->getDate()->format('Y-m-d'),
                 'type' => $incident->getType()->getSlug()
             ));
@@ -149,11 +151,25 @@ class ExternalIncidentListener implements ContainerAwareInterface {
     }
 
     public function slugUpdate($incident) {
-        $incident->setSlug(Sluggable\Urlizer::urlize($incident->getHostAddress() . " " . $incident->getType()->getSlug() . " " . $incident->getDate()->format('Y-m-d'), '_'));
+        $incident->setSlug(Sluggable\Urlizer::urlize($incident->getIp() . " " . $incident->getType()->getSlug() . " " . $incident->getDate()->format('Y-m-d'), '_'));
     }
 
     public function networkUpdate($incident, $event) {
-        
+//        if (!$incident->isClosed()) {
+        $entityManager = $event->getEntityManager();
+        $network_handler = $this->container->get('cert_unlp.ngen.network.handler');
+        $network = $incident->getNetwork();
+        $newNetwork = $network_handler->getByIp($incident->getIp());
+        if ($network != null && !$incident->isClosed()) {
+            if (!$network->equals($newNetwork)) {
+                $incident->setNetwork($newNetwork);
+                $incident->setNetworkAdmin($newNetwork->getNetworkAdmin());
+            }
+        } else {
+            $incident->setNetwork($newNetwork);
+            $incident->setNetworkAdmin($newNetwork->getNetworkAdmin());
+        }
+//        }
     }
 
     public function stateUpdate($incident, $event) {

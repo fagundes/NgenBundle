@@ -56,13 +56,13 @@ cert_ngen_network:
     type:     annotation
     prefix:   /networks    
     
-cert_ngen_internal_incident:
-    resource: '@CertUnlpNgenBundle/Controller/Frontend/Incident/InternalIncidentFrontendController.php'
+cert_ngen_incident:
+    resource: '@CertUnlpNgenBundle/Controller/Frontend/Incident/IncidentFrontendController.php'
     type:     annotation
     prefix:   /incidents/internals
     
-cert_ngen_external_incident:
-    resource: '@CertUnlpNgenBundle/Controller/Frontend/Incident/ExternalIncidentFrontendController.php'
+cert_ngen_incident:
+    resource: '@CertUnlpNgenBundle/Controller/Frontend/Incident/IncidentFrontendController.php'
     type:     annotation
     prefix:   /incidents/externals
 

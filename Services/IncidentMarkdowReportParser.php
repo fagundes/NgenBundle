@@ -19,8 +19,8 @@ class IncidentMarkdowReportParser extends MarkdownExtra implements MarkdownParse
     public function __construct() {
         parent::__construct();
         $this->span_gamut['doParseIncidentVariables'] = 7;
-        $this->mappingIncidentVariables = ['{{IP}}' => '{{incident.hostAddress}}',
-            '{{hostAddress}}' => '{{incident.hostAddress}}',
+        $this->mappingIncidentVariables = ['{{IP}}' => '{{incident.ip}}',
+            '{{ip}}' => '{{incident.ip}}',
             '{{reporter}}' => '{{incident.reporter}}',
             '{{type}}' => '{{incident.type}}',
             '{{network}}' => '{{incident.network}}',

@@ -50,8 +50,8 @@ class NetworkHandler extends Handler {
      *
      * @return NetworkInterface
      */
-    public function getByHostAddress($address) {
-        $network = $this->repository->findByHostAddress($address);
+    public function getByIp($address) {
+        $network = $this->repository->findByIp($address);
         if (!$network && $this->default_network) {
 
             $network = $this->repository->findOneByIp($this->default_network);

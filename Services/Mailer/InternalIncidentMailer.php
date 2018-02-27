@@ -13,10 +13,10 @@ namespace CertUnlp\NgenBundle\Services\Mailer;
 
 use FOS\CommentBundle\Event\CommentPersistEvent;
 
-class InternalIncidentMailer extends IncidentMailer {
+class IncidentMailer extends IncidentMailer {
 
     public function __construct(\Swift_Mailer $mailer, $templating, $cert_email, $upload_directory, $commentManager, $environment, $report_factory, $lang) {
-        $this->reports_path = 'CertUnlpNgenBundle:InternalIncident:Report/Twig';
+        $this->reports_path = 'CertUnlpNgenBundle:Incident:Report/Twig';
         parent::__construct($mailer, $templating, $cert_email, $upload_directory, $commentManager, $environment, $report_factory, $lang);
     }
 

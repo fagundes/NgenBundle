@@ -14,7 +14,7 @@ var IncidentForm = Form.extend({
         $("#editReport").on("click", $.proxy(this.editReport, this));
     },
     setIncidentId: function () {
-        this.incidentId = $('#hostAddress').val() + "/" + $('#date').val() + "/" + $('#type').val();
+        this.incidentId = $('#ip').val() + "/" + $('#date').val() + "/" + $('#type').val();
     },
     getObjectBrief: function () {
         return 'incident';

@@ -65,7 +65,7 @@ class IncidentMailer implements IncidentMailerInterface {
                 $html = $this->getBody($incident);
                 $text = strip_tags($this->getBody($incident, 'txt'));
                 $message = \Swift_Message::newInstance()
-                        ->setSubject(sprintf($this->mailSubject(), $incident->getType()->getName(), $incident->getHostAddress(), $incident->getId()))
+                        ->setSubject(sprintf($this->mailSubject(), $incident->getType()->getName(), $incident->getIp(), $incident->getId()))
                         ->setFrom($this->cert_email)
                         ->setCc($this->cert_email)
                         ->setSender($this->cert_email)
@@ -94,7 +94,7 @@ class IncidentMailer implements IncidentMailerInterface {
         $html = $this->getReplyBody($incident, $body);
         $text = strip_tags($this->getReplyBody($incident, $body, 'txt'));
         $message = \Swift_Message::newInstance()
-                ->setSubject(sprintf($this->replySubject(), $incident->getType()->getName(), $incident->getHostAddress(), $incident->getId()))
+                ->setSubject(sprintf($this->replySubject(), $incident->getType()->getName(), $incident->getIp(), $incident->getId()))
                 ->setFrom($this->cert_email)
                 ->setBody($text)
                 ->addPart($html, 'text/html');

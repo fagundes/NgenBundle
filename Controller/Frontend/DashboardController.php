@@ -16,8 +16,8 @@ use CertUnlp\NgenBundle\Model\IncidentInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use CertUnlp\NgenBundle\Form\ExternalIncidentType;
-use CertUnlp\NgenBundle\Form\ExternalIncident;
+use CertUnlp\NgenBundle\Form\IncidentType;
+use CertUnlp\NgenBundle\Form\Incident;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 
@@ -33,7 +33,7 @@ class DashboardController extends Controller {
      */
     public function homeAction(Request $request) {
 
-        return $this->redirect($this->generateUrl('cert_unlp_ngen_internal_incident_frontend_home'));
+        return $this->redirect($this->generateUrl('cert_unlp_ngen_incident_frontend_home'));
 //        // Chart
 //        $series = array(
 //            array("name" => "Data Serie Name", "data" => array(1, 2, 4, 5, 6, 3, 8))
@@ -53,25 +53,25 @@ class DashboardController extends Controller {
 
 //
 //    /**
-//     * @Template("CertUnlpNgenBundle:ExternalIncident:Frontend/home.html.twig")
-//     * @Route("search", name="cert_unlp_ngen_external_incident_search_incident")
+//     * @Template("CertUnlpNgenBundle:Incident:Frontend/home.html.twig")
+//     * @Route("search", name="cert_unlp_ngen_incident_search_incident")
 //     */
 //    public function searchIncidentAction(Request $request) {
 //        return $this->getFrontendController()->searchEntity($request);
 //    }
 //
 //    /**
-//     * @Template("CertUnlpNgenBundle:ExternalIncident:Frontend/incidentForm.html.twig")
-//     * @Route("/new", name="cert_unlp_ngen_external_incident_frontend_new_incident")
+//     * @Template("CertUnlpNgenBundle:Incident:Frontend/incidentForm.html.twig")
+//     * @Route("/new", name="cert_unlp_ngen_incident_frontend_new_incident")
 //     */
 //    public function newIncidentAction(Request $request) {
 //        return $this->getFrontendController()->newEntity($request);
 //    }
 //
 //    /**
-//     * @Template("CertUnlpNgenBundle:ExternalIncident:Frontend/incidentForm.html.twig")
-//     * @Route("{hostAddress}/{date}/{type}/edit", name="cert_unlp_ngen_external_incident_frontend_edit_incident")
-//     * @ParamConverter("incident", class="CertUnlpNgenBundle:ExternalIncident", options={"repository_method" = "findByHostDateType"})
+//     * @Template("CertUnlpNgenBundle:Incident:Frontend/incidentForm.html.twig")
+//     * @Route("{ip}/{date}/{type}/edit", name="cert_unlp_ngen_incident_frontend_edit_incident")
+//     * @ParamConverter("incident", class="CertUnlpNgenBundle:Incident", options={"repository_method" = "findByHostDateType"})
 //
 //     */
 //    public function editIncidentAction(IncidentInterface $incident) {
@@ -79,9 +79,9 @@ class DashboardController extends Controller {
 //    }
 //
 //    /**
-//     * @Template("CertUnlpNgenBundle:ExternalIncident:Frontend/incidentDetail.html.twig")
-//     * @Route("{hostAddress}/{date}/{type}/detail", name="cert_unlp_ngen_external_incident_frontend_detail_incident")
-//     * @ParamConverter("incident", class="CertUnlpNgenBundle:ExternalIncident", options={"repository_method" = "findByHostDateType"})
+//     * @Template("CertUnlpNgenBundle:Incident:Frontend/incidentDetail.html.twig")
+//     * @Route("{ip}/{date}/{type}/detail", name="cert_unlp_ngen_incident_frontend_detail_incident")
+//     * @ParamConverter("incident", class="CertUnlpNgenBundle:Incident", options={"repository_method" = "findByHostDateType"})
 //
 //     */
 //    public function datailIncidentAction(IncidentInterface $incident) {

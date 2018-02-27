@@ -63,7 +63,7 @@ abstract class Handler implements ApiHandlerInterface {
      * @return Entity
      */
     public function post(array $parameters, $csrf_protection = false) {
-        $entity_class_instance = $this->createEntityInstance();
+        $entity_class_instance = $this->createEntityInstance($parameters);
 
         return $this->processForm($entity_class_instance, $parameters, 'POST', $csrf_protection);
     }
@@ -132,6 +132,7 @@ abstract class Handler implements ApiHandlerInterface {
 
         $form = $this->formFactory->create(new $this->entityType(), $entity_class_instance, array('csrf_protection' => $csrf_protection, 'method' => $method));
         $form->submit($parameters, 'PATCH' !== $method);
+        
         if ($form->isValid()) {
             $entity_class_instance = $form->getData();
 
@@ -145,9 +146,9 @@ abstract class Handler implements ApiHandlerInterface {
         ('Invalid submitted data', $form);
     }
 
-    private function createEntityInstance() {
+    public function createEntityInstance($parameters = []) {
 
-        return new $this->entityClass();
+        return new $this->entityClass($parameters);
     }
 
     /**

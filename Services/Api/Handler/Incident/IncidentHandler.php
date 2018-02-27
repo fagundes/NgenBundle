@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Ngen - CSIRT InternalIncident Report System.
+ * This file is part of the Ngen - CSIRT Incident Report System.
  *
  * (c) CERT UNLP <support@cert.unlp.edu.ar>
  *
@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace CertUnlp\NgenBundle\Services\Api\Handler;
+namespace CertUnlp\NgenBundle\Services\Api\Handler\Incident;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -18,15 +18,25 @@ use Symfony\Component\Security\Core\SecurityContext;
 use CertUnlp\NgenBundle\Services\Api\Handler\Handler;
 use CertUnlp\NgenBundle\Services\Api\Handler\UserHandler;
 
-abstract class IncidentHandler extends Handler {
+class IncidentHandler extends Handler {
 
     private $user_handler;
     private $context;
 
-    public function __construct(ObjectManager $om, $entityClass, $entityType, FormFactoryInterface $formFactory, SecurityContext $context, UserHandler $user_handler) {
+    public function __construct(ObjectManager $om, $entityClass, $entityType, FormFactoryInterface $formFactory, SecurityContext $context, UserHandler $user_handler, $host_factory) {
         parent::__construct($om, $entityClass, $entityType, $formFactory);
         $this->user_handler = $user_handler;
+        $this->host_factory = $host_factory;
         $this->context = $context;
+    }
+
+    public function createEntityInstance($params = []) {
+        $incident = new $this->entityClass();
+
+        $incident->setOrigin($this->host_factory->getHost($params['origin']));
+        $incident->setDestination($this->host_factory->getHost($params['destination']));
+        var_dump($incident);die;
+        return $incident;
     }
 
     public function getUser() {
@@ -38,7 +48,7 @@ abstract class IncidentHandler extends Handler {
     }
 
     /**
-     * Delete a InternalIncident.
+     * Delete a Incident.
      *
      * @param IncidentInterface $incident
      * @param array $parameters
@@ -66,6 +76,8 @@ abstract class IncidentHandler extends Handler {
         if (!isset($parameters['reporter']) || !$parameters['reporter']) {
             $parameters['reporter'] = $this->getReporter();
         }
+        unset($parameters['origin']);
+        unset($parameters['destination']);
         return parent::processForm($incident, $parameters, $method, $csrf_protection);
     }
 
@@ -85,7 +97,7 @@ abstract class IncidentHandler extends Handler {
             if ($incident->getOpenDays(true) >= $days) {
                 $incident->setState($state);
                 $this->om->persist($incident);
-                $closedIncidents[$incident->getId()] = ['hostAddress' => $incident->getHostAddress(),
+                $closedIncidents[$incident->getId()] = ['ip' => $incident->getIp(),
                     'type' => $incident->getType(),
                     'date' => getDate(),
                     'lastTimeDetected' => $incident->getLastTimeDetected(),
@@ -98,6 +110,25 @@ abstract class IncidentHandler extends Handler {
 
     public function renotificateIncidents() {
         return $this->repository->findRenotificables();
+    }
+
+    protected function checkIfExists($incident, $method) {
+        $incidentDB = $this->repository->findOneBy(['isClosed' => false, 'ip' => $incident->getIp(), 'type' => $incident->getType()]);
+        if ($incidentDB && $method == 'POST') {
+            if ($incident->getFeed()->getSlug() == "shadowserver") {
+                $incidentDB->setSendReport(false);
+            } else {
+                $incidentDB->setSendReport($incident->getSendReport());
+            }
+
+            if ($incident->getEvidenceFile()) {
+                $incidentDB->setEvidenceFile($incident->getEvidenceFile());
+            }
+
+            $incident = $incidentDB;
+            $incident->setLastTimeDetected(new \DateTime('now'));
+        }
+        return $incident;
     }
 
 }

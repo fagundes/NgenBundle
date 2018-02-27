@@ -11,36 +11,36 @@ cert_ngen:
             
     indcidents:
         internal:
-            class: CertUnlp\NgenBundle\Entity\InternalIncident
+            class: CertUnlp\NgenBundle\Entity\Incident
             handler: 
-                class: CertUnlp\NgenBundle\Services\Api\Handler\InternalIncidentHandler
+                class: CertUnlp\NgenBundle\Services\Api\Handler\IncidentHandler
             delegator_chain: 
-                class: CertUnlp\NgenBundle\Services\Delegator\InternalIncidentDelegatorChain
+                class: CertUnlp\NgenBundle\Services\Delegator\IncidentDelegatorChain
             form_type: 
-                class: CertUnlp\NgenBundle\Form\InternalIncidentType
+                class: CertUnlp\NgenBundle\Form\IncidentType
             reports: 
                 markdown:
-                    path: %kernel.root_dir%/../src/CertUnlp/NgenBundle/Resources/views/InternalIncident/Report/Markdown
+                    path: %kernel.root_dir%/../src/CertUnlp/NgenBundle/Resources/views/Incident/Report/Markdown
                 twig:
-                    path: %kernel.root_dir%/../src/CertUnlp/NgenBundle/Resources/views/InternalIncident/Report/Twig
+                    path: %kernel.root_dir%/../src/CertUnlp/NgenBundle/Resources/views/Incident/Report/Twig
             mailer:
-                class: CertUnlp\NgenBundle\Services\Mailer\InternalIncidentMailer
+                class: CertUnlp\NgenBundle\Services\Mailer\IncidentMailer
                   
         external:
-            class: CertUnlp\NgenBundle\Entity\ExternalIncident
+            class: CertUnlp\NgenBundle\Entity\Incident
             handler: 
-                class: CertUnlp\NgenBundle\Services\Api\Handler\ExternalIncidentHandler
+                class: CertUnlp\NgenBundle\Services\Api\Handler\IncidentHandler
             delegator_chain: 
-                class: CertUnlp\NgenBundle\Services\Delegator\ExternalIncidentDelegatorChain
+                class: CertUnlp\NgenBundle\Services\Delegator\IncidentDelegatorChain
             form_type: 
-                class: CertUnlp\NgenBundle\Form\ExternalIncidentType
+                class: CertUnlp\NgenBundle\Form\IncidentType
             reports: 
                 markdown:
-                    path: %kernel.root_dir%/../src/CertUnlp/NgenBundle/Resources/views/ExternalIncident/Report/Markdown
+                    path: %kernel.root_dir%/../src/CertUnlp/NgenBundle/Resources/views/Incident/Report/Markdown
                 twig:
-                    path: %kernel.root_dir%/../src/CertUnlp/NgenBundle/Resources/views/ExternalIncident/Report/Twig
+                    path: %kernel.root_dir%/../src/CertUnlp/NgenBundle/Resources/views/Incident/Report/Twig
             mailer:
-                class: CertUnlp\NgenBundle\Services\Mailer\ExternalIncidentMailer
+                class: CertUnlp\NgenBundle\Services\Mailer\IncidentMailer
                 
         mailer:
             class: CertUnlp\NgenBundle\Services\IncidentMailer

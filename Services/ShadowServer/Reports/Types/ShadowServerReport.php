@@ -37,7 +37,7 @@ class ShadowServerReport implements IncidentConvertible {
         return $this->shadow_server_csv_row;
     }
 
-    public function getHostAddress() {
+    public function getIp() {
         return $this->getShadowServerCsvRow()->getIp();
     }
 

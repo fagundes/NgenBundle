@@ -21,8 +21,7 @@ use Exception;
 
 class RdapClient {
 
-    public function __construct($resources_path) {
-        $this->resources_path = $resources_path;
+    public function __construct() {
         $this->entities = [];
         $this->response = null;
         $this->request_url = 'https://rdap.arin.net/registry/ip/';

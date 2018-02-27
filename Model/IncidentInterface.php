@@ -26,25 +26,25 @@ use Symfony\Component\HttpFoundation\File\File;
 interface IncidentInterface {
 
     /**
-     * Set hostAddress
+     * Set ip
      *
-     * @param string $hostAddress
-     * @return InternalIncident
+     * @param string $ip
+     * @return Incident
      */
-    public function setHostAddress($hostAddress);
+    public function setIp($ip);
 
     /**
-     * Get hostAddress
+     * Get ip
      *
      * @return string 
      */
-    public function getHostAddress();
+    public function getIp();
 
     /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return InternalIncident
+     * @return Incident
      */
 //    public function setCreatedAt($createdAt);
 
@@ -59,7 +59,7 @@ interface IncidentInterface {
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return InternalIncident
+     * @return Incident
      */
 //    public function setUpdatedAt($updatedAt);
 
@@ -74,7 +74,7 @@ interface IncidentInterface {
      * Set isClosed
      *
      * @param boolean $isClosed
-     * @return InternalIncident
+     * @return Incident
      */
     public function setIsClosed($isClosed);
 
@@ -96,7 +96,7 @@ interface IncidentInterface {
      * Set network
      *
      * @param \CertUnlp\NgenBundle\Model\NetworkInterface $network
-     * @return InternalIncident
+     * @return Incident
      */
     public function setNetwork(\CertUnlp\NgenBundle\Model\NetworkInterface $network = null);
 
@@ -111,7 +111,7 @@ interface IncidentInterface {
      * Set type
      *
      * @param \CertUnlp\NgenBundle\Entity\IncidentType $type
-     * @return InternalIncident
+     * @return Incident
      */
     public function setType(\CertUnlp\NgenBundle\Entity\IncidentType $type = null);
 
@@ -126,7 +126,7 @@ interface IncidentInterface {
      * Set date
      *
      * @param \DateTime $date
-     * @return InternalIncident
+     * @return Incident
      */
     public function setDate($date);
 
@@ -143,7 +143,7 @@ interface IncidentInterface {
      * Set reporter
      *
      * @param \CertUnlp\NgenBundle\Model\ReporterInterface $reporter
-     * @return InternalIncident
+     * @return Incident
      */
     public function setReporter(ReporterInterface $reporter = null);
 
@@ -158,7 +158,7 @@ interface IncidentInterface {
      * Set evidence_file
      *
      * @param string $evidenceFile
-     * @return InternalIncident
+     * @return Incident
      */
     public function setEvidenceFile(File $evidenceFile = null);
 
@@ -173,7 +173,7 @@ interface IncidentInterface {
      * Set evidence_file_path
      *
      * @param string $evidenceFilePath
-     * @return InternalIncident
+     * @return Incident
      */
     public function setEvidenceFilePath($evidenceFilePath);
 
@@ -195,7 +195,7 @@ interface IncidentInterface {
      * Set evidence_file_temp
      *
      * @param string $evidenceFileTemp
-     * @return InternalIncident
+     * @return Incident
      */
     public function setEvidenceFileTemp($evidenceFileTemp);
 
@@ -217,7 +217,7 @@ interface IncidentInterface {
      * Set report_sent
      *
      * @param boolean $sendReport
-     * @return InternalIncident
+     * @return Incident
      */
     public function setSendReport($sendReport);
 

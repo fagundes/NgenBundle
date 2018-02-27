@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Ngen - CSIRT Incident Report System.
+ * This file is part of the Ngen - CSIRT Host Report System.
  *
  * (c) CERT UNLP <support@cert.unlp.edu.ar>
  *
@@ -9,23 +9,39 @@
  * with this source code in the file LICENSE.
  */
 
-namespace CertUnlp\NgenBundle\Services;
+namespace CertUnlp\NgenBundle\Services\Host;
 
 use CertUnlp\NgenBundle\Services\Rdap\RdapClient;
-use CertUnlp\NgenBundle\Entity\ExternalIncident;
+use CertUnlp\NgenBundle\Entity\Incident\Host\HostExternal as Host;
 
-class IncidentRdapClient extends RdapClient {
+class HostRdapClient extends RdapClient {
 
-    public function prePersistDelegation(ExternalIncident $incident) {
+    public function prePersistDelegation(Host $host) {
         try {
-            $this->response = $this->requestIp($incident->getHostAddress());
+            $this->response = $this->requestIp($host->getIp());
             $this->seachForAbuseEntities();
-            $incident->setAbuseEntity($this->getAbuseEntity());
-            $incident->setAbuseEntityEmails($this->getAbuseEntityEmails());
-            $incident->setNetworkEntity($this->getNetworkEntity());
-            $incident->setStartAddress($this->getStartAddress());
-            $incident->setEndAddress($this->getEndAddress());
-            $incident->setCountry($this->getCountry());
+            $host->setAbuseEntity($this->getAbuseEntity());
+            $host->setAbuseEntityEmails($this->getAbuseEntityEmails());
+            $host->setNetworkEntity($this->getNetworkEntity());
+            $host->setStartAddress($this->getStartAddress());
+            $host->setEndAddress($this->getEndAddress());
+            $host->setCountry($this->getCountry());
+        } catch (Exception $exc) {
+            throw new Exception($exc);
+        }
+    }
+
+    public function hostSearch(Host $host) {
+        try {
+            $this->response = $this->requestIp($host->getIp());
+            $this->seachForAbuseEntities();
+            $host->setAbuseEntity($this->getAbuseEntity());
+            $host->setAbuseEntityEmails($this->getAbuseEntityEmails());
+            $host->setNetworkEntity($this->getNetworkEntity());
+            $host->setStartAddress($this->getStartAddress());
+            $host->setEndAddress($this->getEndAddress());
+            $host->setCountry($this->getCountry());
+            return $host;
         } catch (Exception $exc) {
             throw new Exception($exc);
         }

@@ -30,7 +30,7 @@ class IncidentCommentThread extends BaseThread {
 
     /**
      * @var string
-     * @ORM\OneToOne(targetEntity="CertUnlp\NgenBundle\Entity\Incident", inversedBy="comment_thread")
+     * @ORM\OneToOne(targetEntity="CertUnlp\NgenBundle\Entity\Incident\Incident", inversedBy="comment_thread")
      * 
      * */
     protected $incident;
@@ -58,10 +58,10 @@ class IncidentCommentThread extends BaseThread {
     /**
      * Set incident
      *
-     * @param \CertUnlp\NgenBundle\Entity\Incident $incident
+     * @param \CertUnlp\NgenBundle\Entity\Incident\Incident $incident
      * @return IncidentCommentThread
      */
-    public function setIncident(\CertUnlp\NgenBundle\Entity\Incident $incident = null) {
+    public function setIncident(\CertUnlp\NgenBundle\Entity\Incident\Incident $incident = null) {
         $this->incident = $incident;
 
         return $this;
@@ -70,7 +70,7 @@ class IncidentCommentThread extends BaseThread {
     /**
      * Get incident
      *
-     * @return \CertUnlp\NgenBundle\Entity\Incident 
+     * @return \CertUnlp\NgenBundle\Entity\Incident\Incident 
      */
     public function getIncident() {
         return $this->incident;

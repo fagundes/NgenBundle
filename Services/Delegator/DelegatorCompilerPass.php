@@ -31,25 +31,24 @@ class DelegatorCompilerPass implements CompilerPassInterface {
             return;
         }
 
-        $definition_internal_delegator = $container->getDefinition('cert_unlp.ngen.incident.internal.delegator_chain');
-        $definition_external_delegator = $container->getDefinition('cert_unlp.ngen.incident.external.delegator_chain');
+        $incident_definition_delegator = $container->getDefinition('cert_unlp.ngen.incident.delegator_chain');
+        $host_internal_definition_delegator = $container->getDefinition('cert_unlp.ngen.host.internal.delegator_chain');
+        $host_external_definition_delegator = $container->getDefinition('cert_unlp.ngen.host.external.delegator_chain');
 
-        $internal_tagged_services = $container->findTaggedServiceIds('cert_unlp.ngen.incident.internal.delegate');
-        $external_tagged_services = $container->findTaggedServiceIds('cert_unlp.ngen.incident.external.delegate');
+        $incident_tagged_services = $container->findTaggedServiceIds('cert_unlp.ngen.incident.delegate');
+        $host_internal_tagged_services = $container->findTaggedServiceIds('cert_unlp.ngen.host.internal.delegate');
+        $host_external_tagged_services = $container->findTaggedServiceIds('cert_unlp.ngen.host.external.delegate');
 
-        foreach ($internal_tagged_services as $id => $tags) {
+        $this->addDelegate($incident_tagged_services, $incident_definition_delegator);
+        $this->addDelegate($host_internal_tagged_services, $host_internal_definition_delegator);
+        $this->addDelegate($host_external_tagged_services, $host_external_definition_delegator);
+    }
+
+    private function addDelegate($tagged_services, $definition_delegator) {
+        foreach ($tagged_services as $id => $tags) {
             foreach ($tags as $attributes) {
 
-                $definition_internal_delegator->addMethodCall(
-                        'addDelegate', array(new Reference($id), isset($attributes["alias"]) ? $attributes["alias"] : null, isset($attributes["priority"]) ? $attributes["priority"] : null)
-                );
-            }
-        }
-
-        foreach ($external_tagged_services as $id => $tags) {
-            foreach ($tags as $attributes) {
-
-                $definition_external_delegator->addMethodCall(
+                $definition_delegator->addMethodCall(
                         'addDelegate', array(new Reference($id), isset($attributes["alias"]) ? $attributes["alias"] : null, isset($attributes["priority"]) ? $attributes["priority"] : null)
                 );
             }

@@ -8,7 +8,7 @@
 #}
 
 {% extends 'CertUnlpNgenBundle::Incident/Frontend/incidentDetail.html.twig' %}
-{% block sideBar_search_path %}{{path('cert_unlp_ngen_external_incident_search_incident')}}{% endblock %}
+{% block sideBar_search_path %}{{path('cert_unlp_ngen_incident_search_incident')}}{% endblock %}
 
 {% block content_header %}
     <h1 class="page-header">{{icon('arrow-circle-up fa-fw')}}External object [ID: {{object.id}}][{{object.type}}]{%include "CertUnlpNgenBundle:Incident:Frontend/list/stateLabel.html.twig" with {'incident': object}%}</h1>
@@ -86,5 +86,5 @@
     </div>
 {% endblock %}
 {% block comments_body %}
-    {{ render(controller('CertUnlpNgenBundle:ExternalIncidentFrontend:incidentComments', {'incident': object, 'request': app.request})) }}
+    {{ render(controller('CertUnlpNgenBundle:IncidentFrontend:incidentComments', {'incident': object, 'request': app.request})) }}
 {% endblock %}

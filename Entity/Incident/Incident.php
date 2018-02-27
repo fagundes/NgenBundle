@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace CertUnlp\NgenBundle\Entity;
+namespace CertUnlp\NgenBundle\Entity\Incident;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -29,7 +29,6 @@ use Doctrine\ORM\Mapping\MappedSuperclass;
  * @JMS\ExclusionPolicy("all")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
- * @ORM\DiscriminatorMap({"incident"="incident","internal" = "InternalIncident", "external" = "ExternalIncident"})
  */
 class Incident implements IncidentInterface {
 
@@ -112,7 +111,6 @@ class Incident implements IncidentInterface {
      * @ORM\JoinColumn(name="type", referencedColumnName="slug")
      * @JMS\Expose
      * @JMS\Groups({"api"})
-     * @CustomAssert\TypeHasReport
      */
     protected $type;
 
@@ -132,6 +130,22 @@ class Incident implements IncidentInterface {
      * @JMS\Groups({"api"})
      */
     protected $state;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\Incident\Host\Host", inversedBy="incidents_as_origin") 
+     * @ORM\JoinColumn(name="state", referencedColumnName="id")
+     * @JMS\Expose
+     * @JMS\Groups({"api"})
+     */
+    protected $origin;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\Incident\Host\Host", inversedBy="incidents_as_destination") 
+     * @ORM\JoinColumn(name="state", referencedColumnName="id")
+     * @JMS\Expose
+     * @JMS\Groups({"api"})
+     */
+    protected $destination;
 
     /**
      * @ORM\OneToOne(targetEntity="CertUnlp\NgenBundle\Entity\IncidentCommentThread",mappedBy="incident",fetch="EXTRA_LAZY"))
@@ -178,23 +192,23 @@ class Incident implements IncidentInterface {
     }
 
     /**
-     * Set hostAddress
+     * Set ip
      *
-     * @param string $hostAddress
+     * @param string $ip
      * @return Incident
      */
-    public function setHostAddress($hostAddress) {
-        $this->hostAddress = $hostAddress;
+    public function setIp($ip) {
+        $this->ip = $ip;
         return $this;
     }
 
     /**
-     * Get hostAddress
+     * Get ip
      *
      * @return string 
      */
-    public function getHostAddress() {
-        return $this->hostAddress;
+    public function getIp() {
+        return $this->ip;
     }
 
     /**
@@ -674,6 +688,59 @@ class Incident implements IncidentInterface {
 
     public function isExternal() {
         return false;
+    }
+
+    /**
+     * Set origin
+     *
+     * @param \CertUnlp\NgenBundle\Entity\Incident\Host\Host $origin
+     *
+     * @return Incident
+     */
+    public function setOrigin(\CertUnlp\NgenBundle\Entity\Incident\Host\Host $origin = null) {
+        $this->origin = $origin;
+
+        return $this;
+    }
+
+    /**
+     * Get origin
+     *
+     * @return \CertUnlp\NgenBundle\Entity\Incident\Host\Host
+     */
+    public function getOrigin() {
+        return $this->origin;
+    }
+
+    /**
+     * Set destination
+     *
+     * @param \CertUnlp\NgenBundle\Entity\Incident\Host\Host $destination
+     *
+     * @return Incident
+     */
+    public function setDestination(\CertUnlp\NgenBundle\Entity\Incident\Host\Host $destination = null) {
+        $this->destination = $destination;
+
+        return $this;
+    }
+
+    /**
+     * Get destination
+     *
+     * @return \CertUnlp\NgenBundle\Entity\Incident\Host\Host
+     */
+    public function getDestination() {
+        return $this->destination;
+    }
+
+    /**
+     * Get direction
+     *
+     * @return string
+     */
+    public function getDirection() {
+        return $this->origin->discr . "/" . $this->destination->discr;
     }
 
 }

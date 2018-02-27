@@ -16,7 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 
-class ExternalIncidentType extends AbstractType {
+class FIncidentType extends AbstractType {
 
     /**
      * @param FormBuilderInterface $builder
@@ -35,7 +35,11 @@ class ExternalIncidentType extends AbstractType {
                         return $er->createQueryBuilder('it')
                                 ->where('it.isActive = TRUE');
                     }))
-                ->add('hostAddress', null, array(
+                ->add('origin', "text", array(
+                    'attr' => array('maxlength' => '300', 'help_text' => 'Add more than one address separating them with a comma.'),
+                    'description' => "The host IP. (Add more than one address separating them with a comma.)"))
+                ->add('destination', "text", array(
+                    'required' => false,
                     'attr' => array('maxlength' => '300', 'help_text' => 'Add more than one address separating them with a comma.'),
                     'description' => "The host IP. (Add more than one address separating them with a comma.)"))
                 ->add('reporter', null, array(
@@ -57,7 +61,8 @@ class ExternalIncidentType extends AbstractType {
                 ->add('feed', 'entity', array(
                     'class' => 'CertUnlpNgenBundle:IncidentFeed',
                     'required' => true,
-                    'description' => "(bro|external_report|netflow|shadowserver)",'query_builder' => function (EntityRepository $er) {
+                    'description' => "(bro|external_report|netflow|shadowserver)",
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('it')
                                 ->where('it.isActive = TRUE');
                     }))
@@ -101,7 +106,7 @@ class ExternalIncidentType extends AbstractType {
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'CertUnlp\NgenBundle\Model\IncidentInterface',
+            'data_class' => 'CertUnlp\NgenBundle\Entity\Incident\Incident',
             'csrf_protection' => false,
         ));
     }

@@ -16,36 +16,36 @@ use CertUnlp\NgenBundle\Model\IncidentInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use CertUnlp\NgenBundle\Form\InternalIncidentType;
-use CertUnlp\NgenBundle\Form\InternalIncident;
+use CertUnlp\NgenBundle\Form\IncidentType;
+use CertUnlp\NgenBundle\Form\Incident;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class InternalIncidentFrontendController extends Controller {
+class IncidentFrontendController extends Controller {
 
     public function getFrontendController() {
-        return $this->get('cert_unlp.ngen.incident.internal.frontend.controller');
+        return $this->get('cert_unlp.ngen.incident.frontend.controller');
     }
 
     /**
-     * @Template("CertUnlpNgenBundle:InternalIncident:Frontend/home.html.twig")
-     * @Route("/", name="cert_unlp_ngen_internal_incident_frontend_home")
+     * @Template("CertUnlpNgenBundle:Incident:Frontend/home.html.twig")
+     * @Route("/", name="cert_unlp_ngen_incident_frontend_home")
      */
     public function homeAction(Request $request) {               
         return $this->getFrontendController()->homeEntity($request);
     }
 
     /**
-     * @Template("CertUnlpNgenBundle:InternalIncident:Frontend/incidentForm.html.twig")
-     * @Route("/new", name="cert_unlp_ngen_internal_incident_frontend_new_incident")
+     * @Template("CertUnlpNgenBundle:Incident:Frontend/incidentForm.html.twig")
+     * @Route("/new", name="cert_unlp_ngen_incident_frontend_new_incident")
      */
     public function newIncidentAction(Request $request) {
         return $this->getFrontendController()->newEntity($request);
     }
 
     /**
-     * @Template("CertUnlpNgenBundle:InternalIncident:Frontend/incidentForm.html.twig")
-     * @Route("{hostAddress}/{date}/{type}/edit", name="cert_unlp_ngen_internal_incident_frontend_edit_incident")
-     * @ParamConverter("incident", class="CertUnlpNgenBundle:InternalIncident", options={"repository_method" = "findByHostDateType"})
+     * @Template("CertUnlpNgenBundle:Incident:Frontend/incidentForm.html.twig")
+     * @Route("{ip}/{date}/{type}/edit", name="cert_unlp_ngen_incident_frontend_edit_incident")
+     * @ParamConverter("incident", class="CertUnlpNgenBundle:Incident", options={"repository_method" = "findByHostDateType"})
 
      */
     public function editIncidentAction(IncidentInterface $incident) {
@@ -53,9 +53,9 @@ class InternalIncidentFrontendController extends Controller {
     }
 
     /**
-     * @Template("CertUnlpNgenBundle:InternalIncident:Frontend/incidentDetail.html.twig")
-     * @Route("{hostAddress}/{date}/{type}/detail", name="cert_unlp_ngen_internal_incident_frontend_detail_incident")
-     * @ParamConverter("incident", class="CertUnlpNgenBundle:InternalIncident", options={"repository_method" = "findByHostDateType"})
+     * @Template("CertUnlpNgenBundle:Incident:Frontend/incidentDetail.html.twig")
+     * @Route("{ip}/{date}/{type}/detail", name="cert_unlp_ngen_incident_frontend_detail_incident")
+     * @ParamConverter("incident", class="CertUnlpNgenBundle:Incident", options={"repository_method" = "findByHostDateType"})
 
      */
     public function detailIncidentAction(IncidentInterface $incident) {
@@ -63,8 +63,8 @@ class InternalIncidentFrontendController extends Controller {
     }
 
     /**
-     * @Route("{hostAddress}/{date}/{type}/evidence", name="cert_unlp_ngen_internal_incident_frontend_evidence_incident")
-     * @ParamConverter("incident", class="CertUnlpNgenBundle:InternalIncident", options={"repository_method" = "findByHostDateType"})
+     * @Route("{ip}/{date}/{type}/evidence", name="cert_unlp_ngen_incident_frontend_evidence_incident")
+     * @ParamConverter("incident", class="CertUnlpNgenBundle:Incident", options={"repository_method" = "findByHostDateType"})
 
      */
     public function evidenceIncidentAction(IncidentInterface $incident) {
@@ -73,8 +73,8 @@ class InternalIncidentFrontendController extends Controller {
     }
 
     /**
-     * @Template("CertUnlpNgenBundle:InternalIncident:Frontend/home.html.twig")
-     * @Route("search", name="cert_unlp_ngen_internal_incident_search_incident")
+     * @Template("CertUnlpNgenBundle:Incident:Frontend/home.html.twig")
+     * @Route("search", name="cert_unlp_ngen_incident_search_incident")
      */
     public function searchIncidentAction(Request $request) {
         return $this->getFrontendController()->searchEntity($request);
