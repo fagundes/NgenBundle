@@ -30,7 +30,8 @@ class IncidentFrontendController extends Controller {
      * @Template("CertUnlpNgenBundle:Incident:Frontend/home.html.twig")
      * @Route("/", name="cert_unlp_ngen_incident_frontend_home")
      */
-    public function homeAction(Request $request) {               
+    public function homeAction(Request $request) {         
+        var_dump(explode('.O', '192.168.0.0'));die;
         return $this->getFrontendController()->homeEntity($request);
     }
 

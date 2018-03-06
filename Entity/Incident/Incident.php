@@ -13,15 +13,11 @@ namespace CertUnlp\NgenBundle\Entity\Incident;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use CertUnlp\NgenBundle\Validator\Constraints as CustomAssert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use CertUnlp\NgenBundle\Model\ReporterInterface;
-use CertUnlp\NgenBundle\Model\IncidentInterface;
-use CertUnlp\NgenBundle\Model\NetworkInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\File;
 use JMS\Serializer\Annotation as JMS;
-use Doctrine\ORM\Mapping\MappedSuperclass;
 
 /**
  * @ORM\Entity()
@@ -30,7 +26,7 @@ use Doctrine\ORM\Mapping\MappedSuperclass;
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  */
-class Incident implements IncidentInterface {
+class Incident {
 
     /**
      * @var integer
@@ -627,33 +623,6 @@ class Incident implements IncidentInterface {
      */
     public function getReportMessageId() {
         return $this->report_message_id;
-    }
-
-    /**
-     * Set network
-     *
-     * @param \CertUnlp\NgenBundle\Model\NetworkInterface $network
-     * @return Incident
-     */
-    public function setNetwork(NetworkInterface $network = null) {
-        
-    }
-
-    /**
-     * Get network
-     *
-     * @return \CertUnlp\NgenBundle\Model\NetworkInterface
-     */
-    public function getNetwork() {
-        
-    }
-
-    /**
-     * Get network
-     *
-     */
-    public function getNetworkAdmin() {
-        
     }
 
     /**

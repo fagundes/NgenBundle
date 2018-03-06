@@ -34,7 +34,6 @@ class NetworkRepository extends EntityRepository {
         $qb->setParameter('address', $ip);
 
         $results = $qb->getQuery()->getResult();
-        var_dump($results);die;
 
         return $results ? $results[0] : null;
     }

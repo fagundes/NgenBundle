@@ -29,19 +29,11 @@ use CertUnlp\NgenBundle\Entity\Network\Network;
 interface NetworkInterface {
 
     /**
-     * Set ipMask
-     *
-     * @param string $ipMask
-     * @return Network
-     */
-    public function setIpMask($ipMask);
-
-    /**
      * Get ipMask
      *
      * @return string 
      */
-    public function getIpMask();
+    public function getIp();
 
     /**
      * Set isActive
@@ -59,27 +51,11 @@ interface NetworkInterface {
     public function getIsActive();
 
     /**
-     * Set networkAdmin
-     *
-     * @param \CertUnlp\NgenBundle\Entity\Network\NetworkAdmin $networkAdmin
-     * @return Network
-     */
-    public function setNetworkAdmin(NetworkAdmin $networkAdmin = null);
-
-    /**
      * Get networkAdmin
      *
      * @return \CertUnlp\NgenBundle\Entity\Network\NetworkAdmin 
      */
     public function getNetworkAdmin();
-
-    /**
-     * Set NetworkEntity
-     *
-     * @param \CertUnlp\NgenBundle\Entity\Network\NetworkEntity $NetworkEntity
-     * @return Network
-     */
-    public function setNetworkEntity(NetworkEntity $NetworkEntity = null);
 
     /**
      * Get NetworkEntity
@@ -89,76 +65,11 @@ interface NetworkInterface {
     public function getNetworkEntity();
 
     /**
-     * Constructor
-     */
-    public function __construct();
-
-    /**
-     * Add incidents
-     *
-     * @param \CertUnlp\NgenBundle\Model\IncidentInterface $incidents
-     * @return Network
-     */
-    public function addIncident(IncidentInterface $incidents);
-
-    /**
-     * Remove incidents
-     *
-     * @param \CertUnlp\NgenBundle\Model\IncidentInterface $incidents
-     */
-    public function removeIncident(IncidentInterface $incidents);
-
-    /**
      * Get incidents
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
     public function getIncidents();
-
-    /**
-     * Set ip
-     *
-     * @param string $ip
-     * @return Network
-     */
-    public function setIp($ip);
-
-    /**
-     * Get ip
-     *
-     * @return string 
-     */
-    public function getIp();
-
-    /**
-     * Set numericIp
-     *
-     * @param integer $numericIp
-     * @return Network
-     */
-    public function setNumericIp($numericIp);
-
-    /**
-     * Get numericIp
-     *
-     * @return integer 
-     */
-    public function getNumericIp();
-
-    /**
-     * Set numericIpMask
-     *
-     * @param integer $numericIpMask
-     * @return Network
-     */
-    public function setNumericIpMask($numericIpMask);
-
-    /**
-     * Get numericIpMask
-     *
-     * @return integer 
-     */
-    public function getNumericIpMask();
 
     public function equals(NetworkInterface $other);
 }

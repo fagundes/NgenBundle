@@ -36,7 +36,11 @@ class HostFactory {
 
         $network = $this->network_handler->getByIp($ip);
         if ($network) {
-            $host = new $this->host_internal_class($ip);
+            if ($network->isInternal()) {
+                $host = new $this->host_internal_class($ip);
+            } else {
+                $host = new $this->host_external_class($ip);
+            }
             $host->setNetwork($network);
         } else {
             $host = new $this->host_external_class($ip);

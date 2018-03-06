@@ -172,7 +172,7 @@ services:
     
     cert_unlp.ngen.incident.frontend.controller:
         class: CertUnlp\NgenBundle\Services\Frontend\Controller\IncidentFrontendController
-        arguments: ["@doctrine.orm.entity_manager","@form.factory","%cert_unlp.ngen.incident.form_type.class%","@knp_paginator","@fos_elastica.finder.incidents.internal","@fos_comment.manager.comment","@fos_comment.manager.thread","%cert_unlp.ngen.incident.evidence.path%"]
+        arguments: ["@doctrine.orm.entity_manager","@form.factory","%cert_unlp.ngen.incident.form_type.class%","@knp_paginator","@fos_elastica.finder.incidents.incident","@fos_comment.manager.comment","@fos_comment.manager.thread","%cert_unlp.ngen.incident.evidence.path%"]
     
     cert_unlp.ngen.network.frontend.controller:
         class: CertUnlp\NgenBundle\Services\Frontend\Controller\NetworkFrontendController
@@ -180,7 +180,7 @@ services:
     
     cert_unlp.ngen.network.admin.frontend.controller:
         class: CertUnlp\NgenBundle\Services\Frontend\Controller\NetworkAdminFrontendController
-        arguments: ["@doctrine.orm.entity_manager","@form.factory","%cert_unlp.ngen.network.admin.form_type.class%","@knp_paginator","@fos_elastica.finder.network_admins.network_admin","@fos_comment.manager.comment","@fos_comment.manager.thread"]
+        arguments: ["@doctrine.orm.entity_manager","@form.factory","%cert_unlp.ngen.network.admin.form_type.class%","@knp_paginator","@fos_elastica.finder.incidents.incident","@fos_comment.manager.comment","@fos_comment.manager.thread"]
     
     cert_unlp.ngen.incident.feed.frontend.controller:
         class: CertUnlp\NgenBundle\Services\Frontend\Controller\IncidentFeedFrontendController
@@ -204,7 +204,7 @@ services:
     
     cert_unlp.ngen.network_entity.frontend.controller:
         class: CertUnlp\NgenBundle\Services\Frontend\Controller\FrontendController
-        arguments: ["@doctrine.orm.entity_manager","@form.factory","%cert_unlp.ngen.network_entity.form_type.class%","@knp_paginator","@fos_elastica.finder.network_entities.network_entity","@fos_comment.manager.comment","@fos_comment.manager.thread"]
+        arguments: ["@doctrine.orm.entity_manager","@form.factory","%cert_unlp.ngen.network_entity.form_type.class%","@knp_paginator","@fos_elastica.finder.incidents.incident","@fos_comment.manager.comment","@fos_comment.manager.thread"]
      
     cert_unlp.ngen.network.validator:
         class: "%cert_unlp.ngen.network.validator.class%"

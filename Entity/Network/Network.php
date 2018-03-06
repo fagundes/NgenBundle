@@ -29,6 +29,9 @@ use JMS\Serializer\Annotation as JMS;
  *     fields={"ip", "ipMask","isActive"},
  *     message="This network was already added!")
  * @JMS\ExclusionPolicy("all")
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="discr", type="string")
+ * @ORM\DiscriminatorMap({"network" = "Network" , "internal" = "NetworkInternal", "external" = "NetworkExternal"})
  */
 class Network implements NetworkInterface {
 
@@ -87,7 +90,7 @@ class Network implements NetworkInterface {
      */
     private $network_entity;
 
-    /** 
+    /**
      * @ORM\OneToMany(targetEntity="CertUnlp\NgenBundle\Model\IncidentInterface",mappedBy="network", cascade={"persist","remove"}, fetch="EAGER")) 
      * @JMS\Expose
      */
@@ -375,6 +378,37 @@ class Network implements NetworkInterface {
      */
     public function getUpdatedAt() {
         return $this->updatedAt;
+    }
+
+    /**
+     * Add host
+     *
+     * @param \CertUnlp\NgenBundle\Entity\Incident\Incident $host
+     *
+     * @return Network
+     */
+    public function addHost(\CertUnlp\NgenBundle\Entity\Incident\Incident $host) {
+        $this->hosts[] = $host;
+
+        return $this;
+    }
+
+    /**
+     * Remove host
+     *
+     * @param \CertUnlp\NgenBundle\Entity\Incident\Incident $host
+     */
+    public function removeHost(\CertUnlp\NgenBundle\Entity\Incident\Incident $host) {
+        $this->hosts->removeElement($host);
+    }
+
+    /**
+     * Get hosts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHosts() {
+        return $this->hosts;
     }
 
 }
