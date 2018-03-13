@@ -11,9 +11,6 @@
 
 namespace CertUnlp\NgenBundle\Model;
 
-use CertUnlp\NgenBundle\Model\IncidentInterface;
-use CertUnlp\NgenBundle\Entity\Network\NetworkAdmin;
-use CertUnlp\NgenBundle\Entity\Network\NetworkEntity;
 use CertUnlp\NgenBundle\Entity\Network\Network;
 
 /*
@@ -34,6 +31,13 @@ interface NetworkInterface {
      * @return string 
      */
     public function getIp();
+
+    /**
+     * Get ipMask
+     *
+     * @return string
+     */
+    public function getIpMask();
 
     /**
      * Set isActive

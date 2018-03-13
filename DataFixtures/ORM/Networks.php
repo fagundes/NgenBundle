@@ -11,13 +11,12 @@
 
 namespace CertUnlp\NgenBundle\DataFixtures\ORM;
 
+use CertUnlp\NgenBundle\Entity\Network\Network;
+use CertUnlp\NgenBundle\Entity\Network\NetworkAdmin;
+use CertUnlp\NgenBundle\Entity\Network\NetworkEntity;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use CertUnlp\NgenBundle\Entity\Network\Network;
-use ArrayObject;
-use CertUnlp\NgenBundle\Entity\Network\NetworkEntity;
-use CertUnlp\NgenBundle\Entity\Network\NetworkAdmin;
 
 class Networks extends AbstractFixture implements OrderedFixtureInterface {
 

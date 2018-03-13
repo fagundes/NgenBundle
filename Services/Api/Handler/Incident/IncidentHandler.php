@@ -11,31 +11,32 @@
 
 namespace CertUnlp\NgenBundle\Services\Api\Handler\Incident;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Form\FormFactoryInterface;
-use \CertUnlp\NgenBundle\Exception\InvalidFormException;
-use Symfony\Component\Security\Core\SecurityContext;
 use CertUnlp\NgenBundle\Services\Api\Handler\Handler;
 use CertUnlp\NgenBundle\Services\Api\Handler\UserHandler;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Security\Core\SecurityContext;
 
 class IncidentHandler extends Handler {
 
     private $user_handler;
     private $context;
 
-    public function __construct(ObjectManager $om, $entityClass, $entityType, FormFactoryInterface $formFactory, SecurityContext $context, UserHandler $user_handler, $host_factory) {
+    public function __construct(ObjectManager $om, $entityClass, $entityType, FormFactoryInterface $formFactory, SecurityContext $context, UserHandler $user_handler, $host_handler)
+    {
         parent::__construct($om, $entityClass, $entityType, $formFactory);
         $this->user_handler = $user_handler;
-        $this->host_factory = $host_factory;
+        $this->host_handler = $host_handler;
         $this->context = $context;
     }
 
     public function createEntityInstance($params = []) {
         $incident = new $this->entityClass();
 
-        $incident->setOrigin($this->host_factory->getHost($params['origin']));
-        $incident->setDestination($this->host_factory->getHost($params['destination']));
-        var_dump($incident);die;
+        $incident->setOrigin($this->host_handler->getOrCreate(['ip' => $params['origin']]));
+        $incident->setDestination($this->host_handler->getOrCreate(['ip' => $params['destination']]));
+        var_dump($incident->getOrigin()->getIp());
+        die;
         return $incident;
     }
 

@@ -11,25 +11,22 @@
 
 namespace CertUnlp\NgenBundle\Controller\Api\Network;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use FOS\RestBundle\View\View;
+use CertUnlp\NgenBundle\Entity\Network\NetworkEntity;
+use FOS\RestBundle\Controller\Annotations as FOS;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use Symfony\Component\Form\FormTypeInterface;
+use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use CertUnlp\NgenBundle\Form\NetworkEntityType;
-use CertUnlp\NgenBundle\Entity\Network\NetworkEntity;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use FOS\RestBundle\Controller\Annotations as FOS;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use CertUnlp\NgenBundle\Exception\InvalidFormException;
+use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class NetworkEntityController extends FOSRestController {
 
     public function getApiController() {
 
-        return $this->container->get('cert_unlp.ngen.network_entity.api.controller');
+        return $this->container->get('cert_unlp.ngen.network.entity.api.controller');
     }
 
     /**

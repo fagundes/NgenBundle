@@ -11,15 +11,9 @@
 
 namespace CertUnlp\NgenBundle\Entity\Network;
 
-use Doctrine\ORM\Mapping as ORM;
 use CertUnlp\NgenBundle\Model\NetworkInterface;
-use CertUnlp\NgenBundle\Model\IncidentInterface;
-use CertUnlp\NgenBundle\Validator\Constraints as NetworkAssert;
-use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
-use CertUnlp\NgenBundle\Entity\Network\Network;
 
 /**
  * Network
@@ -28,62 +22,28 @@ use CertUnlp\NgenBundle\Entity\Network\Network;
  * @ORM\Entity(repositoryClass="CertUnlp\NgenBundle\Entity\Network\NetworkRepository")
  * @JMS\ExclusionPolicy("all")
  */
-class NetworkInternal extends Network {
-
+class NetworkInternal extends Network implements NetworkInterface
+{
     /**
-     * @var string
-     * @NetworkAssert\Ip
-     * @ORM\Column(name="ip", type="string", length=40)
-     * @JMS\Expose
-     */
-    private $ip;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\Network\NetworkAdmin", inversedBy="networks",cascade={"persist"}) 
+     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\Network\NetworkAdmin", inversedBy="networks",cascade={"persist"})
      * @JMS\Expose
      */
     private $network_admin;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\Network\NetworkEntity", inversedBy="networks",cascade={"persist"}) 
+     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\Network\NetworkEntity", inversedBy="networks",cascade={"persist"})
      * @JMS\Expose
      */
     private $network_entity;
 
     /**
-     * Set ip
-     *
-     * @param string $ip
-     * @return Network
-     */
-    public function setIp($ip) {
-
-        $ip_and_mask = explode('/', $ip);
-
-        $this->ip = $ip_and_mask[0];
-        $this->setNumericIp(ip2long($ip_and_mask[0]));
-        if (isset($ip_and_mask[1])) {
-            $this->setIpMask($ip_and_mask[1]);
-        }
-        return $this;
-    }
-
-    /**
-     * Get ip
-     *
-     * @return string 
-     */
-    public function getIp() {
-        return $this->ip;
-    }
-
-    /**
      * Set network_admin
      *
-     * @param \CertUnlp\NgenBundle\Entity\Network\NetworkAdmin $network_admin
+     * @param NetworkAdmin $network_admin
      * @return Network
      */
-    public function setNetworkAdmin(\CertUnlp\NgenBundle\Entity\Network\NetworkAdmin $network_admin = null) {
+    public function setNetworkAdmin(NetworkAdmin $network_admin = null)
+    {
         $this->network_admin = $network_admin;
 
         return $this;
@@ -92,19 +52,21 @@ class NetworkInternal extends Network {
     /**
      * Get network_admin
      *
-     * @return \CertUnlp\NgenBundle\Entity\Network\NetworkAdmin 
+     * @return NetworkAdmin
      */
-    public function getNetworkAdmin() {
+    public function getNetworkAdmin()
+    {
         return $this->network_admin;
     }
 
     /**
      * Set network_entity
      *
-     * @param \CertUnlp\NgenBundle\Entity\Network\NetworkEntity $network_entity
+     * @param NetworkEntity $network_entity
      * @return Network
      */
-    public function setNetworkEntity(\CertUnlp\NgenBundle\Entity\Network\NetworkEntity $network_entity = null) {
+    public function setNetworkEntity(NetworkEntity $network_entity = null)
+    {
         $this->network_entity = $network_entity;
 
         return $this;
@@ -113,17 +75,20 @@ class NetworkInternal extends Network {
     /**
      * Get network_entity
      *
-     * @return \CertUnlp\NgenBundle\Entity\Network\NetworkEntity 
+     * @return NetworkEntity
      */
-    public function getNetworkEntity() {
+    public function getNetworkEntity()
+    {
         return $this->network_entity;
     }
 
-    public function isInternal() {
+    public function isInternal()
+    {
         return true;
     }
 
-    public function isExternal() {
+    public function isExternal()
+    {
         return false;
     }
 

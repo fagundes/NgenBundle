@@ -11,20 +11,22 @@
 
 namespace CertUnlp\NgenBundle\Services\Api\Handler;
 
+use CertUnlp\NgenBundle\Exception\InvalidFormException;
+use CertUnlp\NgenBundle\Model\ApiHandlerInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormFactoryInterface;
-use \CertUnlp\NgenBundle\Exception\InvalidFormException;
-use Symfony\Component\Security\Core\SecurityContext;
-use CertUnlp\NgenBundle\Model\ApiHandlerInterface;
 
-abstract class Handler implements ApiHandlerInterface {
+abstract class Handler implements ApiHandlerInterface
+{
 
     protected $om;
     protected $entityClass;
     protected $repository;
     protected $formFactory;
+    protected $entityType;
 
-    public function __construct(ObjectManager $om, $entityClass, $entityType, FormFactoryInterface $formFactory) {
+    public function __construct(ObjectManager $om, $entityClass, $entityType, FormFactoryInterface $formFactory)
+    {
         $this->om = $om;
         $this->entityClass = $entityClass;
         $this->repository = $this->om->getRepository($this->entityClass);
@@ -39,19 +41,37 @@ abstract class Handler implements ApiHandlerInterface {
      *
      * @return Entity
      */
-    public function get(array $parameters) {
+    public function get(array $parameters)
+    {
         return $this->repository->findOneBy($parameters);
+    }
+
+    /**
+     * Get a Entity by id.
+     *
+     * @param mixed $id
+     *
+     * @return Entity
+     */
+    public function getOrCreate(array $parameters)
+    {
+        $entity = $this->get($parameters);
+        if (!$entity) {
+            $entity = $this->createEntityInstance($parameters);
+        }
+        return $entity;
     }
 
     /**
      * Get a list of entities.
      *
-     * @param int $limit  the limit of the result
+     * @param int $limit the limit of the result
      * @param int $offset starting from the offset
      *
      * @return array
      */
-    public function all(array $params = array(), $order = array(), $limit = null, $offset = null) {
+    public function all(array $params = array(), $order = array(), $limit = null, $offset = null)
+    {
         return $this->repository->findBy($params, $order, $limit, $offset);
     }
 
@@ -62,7 +82,8 @@ abstract class Handler implements ApiHandlerInterface {
      *
      * @return Entity
      */
-    public function post(array $parameters, $csrf_protection = false) {
+    public function post(array $parameters, $csrf_protection = false)
+    {
         $entity_class_instance = $this->createEntityInstance($parameters);
 
         return $this->processForm($entity_class_instance, $parameters, 'POST', $csrf_protection);
@@ -72,11 +93,12 @@ abstract class Handler implements ApiHandlerInterface {
      * Edit a Entity.
      *
      * @param Entity $entity_class_instance
-     * @param array         $parameters
+     * @param array $parameters
      *
      * @return Entity
      */
-    public function put($entity_class_instance, array $parameters) {
+    public function put($entity_class_instance, array $parameters)
+    {
         return $this->processForm($entity_class_instance, $parameters, 'PUT', false);
     }
 
@@ -84,11 +106,12 @@ abstract class Handler implements ApiHandlerInterface {
      * Partially update a Entity.
      *
      * @param Entity $entity_class_instance
-     * @param array         $parameters
+     * @param array $parameters
      *
      * @return Entity
      */
-    public function patch($entity_class_instance, array $parameters = null) {
+    public function patch($entity_class_instance, array $parameters = null)
+    {
         return $this->processForm($entity_class_instance, $parameters, 'PATCH', false);
     }
 
@@ -100,7 +123,8 @@ abstract class Handler implements ApiHandlerInterface {
      *
      * @return Entity
      */
-    public function delete($entity_class_instance, array $parameters = null) {
+    public function delete($entity_class_instance, array $parameters = null)
+    {
         $this->prepareToDeletion($entity_class_instance, $parameters);
         return $this->patch($entity_class_instance, $parameters);
     }
@@ -121,18 +145,19 @@ abstract class Handler implements ApiHandlerInterface {
      * Processes the form.
      *
      * @param Entity $entity_class_instance
-     * @param array         $parameters
-     * @param String        $method
+     * @param array $parameters
+     * @param String $method
      *
      * @return Entity
      *
      * @throws \CertUnlp\NgenBundle\Exception\InvalidFormException
      */
-    protected function processForm($entity_class_instance, $parameters, $method = "PUT", $csrf_protection = true) {
+    protected function processForm($entity_class_instance, $parameters, $method = "PUT", $csrf_protection = true)
+    {
 
         $form = $this->formFactory->create(new $this->entityType(), $entity_class_instance, array('csrf_protection' => $csrf_protection, 'method' => $method));
         $form->submit($parameters, 'PATCH' !== $method);
-        
+
         if ($form->isValid()) {
             $entity_class_instance = $form->getData();
 
@@ -146,9 +171,26 @@ abstract class Handler implements ApiHandlerInterface {
         ('Invalid submitted data', $form);
     }
 
-    public function createEntityInstance($parameters = []) {
+    public function createEntityInstance($parameters = [])
+    {
 
-        return new $this->entityClass($parameters);
+        if ($parameters) {
+            $refMethod = new \ReflectionMethod($this->entityClass, '__construct');
+            $params = $refMethod->getParameters();
+            $re_args = array();
+
+            foreach ($params as $params_value) {
+                foreach ($params_value as $name => $param_name) {
+                    $re_args[$param_name] = $parameters[$param_name];
+                }
+            }
+
+            $refClass = new \ReflectionClass($this->entityClass);
+            $entity = $refClass->newInstanceArgs((array)$re_args);
+        } else {
+            $entity = new $this->entityClass();
+        }
+        return $entity;
     }
 
     /**
@@ -159,7 +201,8 @@ abstract class Handler implements ApiHandlerInterface {
      *
      * @return NetworkInterface
      */
-    public function desactivate($network, array $parameters = null) {
+    public function desactivate($network, array $parameters = null)
+    {
         return $this->delete($network, $parameters);
     }
 
@@ -171,7 +214,8 @@ abstract class Handler implements ApiHandlerInterface {
      *
      * @return NetworkInterface
      */
-    public function activate($network, array $parameters = null) {
+    public function activate($network, array $parameters = null)
+    {
         $network->setIsActive(TRUE);
         return $this->patch($network, $parameters);
     }

@@ -11,17 +11,18 @@
 
 namespace CertUnlp\NgenBundle\Entity;
 
+use CertUnlp\NgenBundle\Entity\Incident\Incident;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation as JMS;
-use CertUnlp\NgenBundle\Entity\Incident\Incident;
 
 /**
  * Description of IncidentClosingType
  *
  * @author dam
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="IncidentFeedRepository")
  * @JMS\ExclusionPolicy("all")
  */
 class IncidentFeed {
@@ -89,7 +90,7 @@ class IncidentFeed {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->getSlug();
@@ -99,7 +100,7 @@ class IncidentFeed {
      * Set name
      *
      * @param string $name
-     * @return IncidentClosingType
+     * @return IncidentFeed
      */
     public function setName($name) {
         $this->name = $name;
@@ -110,7 +111,7 @@ class IncidentFeed {
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName() {
         return $this->name;
@@ -120,7 +121,7 @@ class IncidentFeed {
      * Set slug
      *
      * @param string $slug
-     * @return IncidentClosingType
+     * @return IncidentFeed
      */
     public function setSlug($slug) {
         $this->slug = $slug;
@@ -131,7 +132,7 @@ class IncidentFeed {
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug() {
         return $this->slug;
@@ -141,7 +142,7 @@ class IncidentFeed {
      * Set isActive
      *
      * @param boolean $isActive
-     * @return Network
+     * @return IncidentFeed
      */
     public function setIsActive($isActive) {
         $this->isActive = $isActive;
@@ -152,7 +153,7 @@ class IncidentFeed {
     /**
      * Get isActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActive() {
         return $this->isActive;
@@ -162,7 +163,7 @@ class IncidentFeed {
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return Network
+     * @return IncidentFeed
      */
     public function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
@@ -173,7 +174,7 @@ class IncidentFeed {
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt() {
         return $this->createdAt;
@@ -183,7 +184,7 @@ class IncidentFeed {
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return Network
+     * @return IncidentFeed
      */
     public function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
@@ -194,7 +195,7 @@ class IncidentFeed {
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt() {
         return $this->updatedAt;
@@ -204,7 +205,7 @@ class IncidentFeed {
      * Constructor
      */
     public function __construct() {
-        $this->incidents = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->incidents = new ArrayCollection();
     }
 
     /**
@@ -223,7 +224,7 @@ class IncidentFeed {
     /**
      * Remove incident
      *
-     * @param \CertUnlp\NgenBundle\Entity\Incident $incident
+     * @param Incident $incident
      */
     public function removeIncident(Incident $incident) {
         $this->incidents->removeElement($incident);

@@ -12,11 +12,7 @@
 namespace CertUnlp\NgenBundle\Entity\Network;
 
 use Doctrine\ORM\Mapping as ORM;
-use CertUnlp\NgenBundle\Model\NetworkInterface;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation as JMS;
-use CertUnlp\NgenBundle\Entity\Network\Network;
 
 /**
  * Network
@@ -25,7 +21,8 @@ use CertUnlp\NgenBundle\Entity\Network\Network;
  * @ORM\Entity(repositoryClass="CertUnlp\NgenBundle\Entity\Network\NetworkRepository")
  * @JMS\ExclusionPolicy("all")
  */
-class NetworkExternal extends Network {
+class NetworkExternal extends Network
+{
 
     /**
      * @ORM\Column(type="string",nullable=true)
@@ -53,21 +50,17 @@ class NetworkExternal extends Network {
      * @JMS\Expose
      * @JMS\Groups({"api"})
      */
+    private $country;
+
+    /**
+     * @var string
+     */
     private $start_address;
 
     /**
-     * @ORM\Column(type="string",nullable=true)
-     * @JMS\Expose
-     * @JMS\Groups({"api"})
+     * @var string
      */
     private $end_address;
-
-    /**
-     * @ORM\Column(type="string",nullable=true)
-     * @JMS\Expose
-     * @JMS\Groups({"api"})
-     */
-    private $country;
 
     /**
      * Set ip
@@ -75,11 +68,13 @@ class NetworkExternal extends Network {
      * @param string $ip
      * @return Network
      */
-    public function setIp($ip) {
-        parent::setIp($this->iprange2cidr($this->getStartAddress(), $this->getEndAddress()));
+    public function setIp($ip)
+    {
+        return parent::setIp($this->iprange2cidr($this->getStartAddress(), $this->getEndAddress()));
     }
 
-    private function iprange2cidr($ipStart, $ipEnd) {
+    private function iprange2cidr($ipStart, $ipEnd)
+    {
         $start = ip2long($ipStart);
         $end = ip2long($ipEnd);
         $result = array();
@@ -104,7 +99,12 @@ class NetworkExternal extends Network {
             array_push($result, "$ip/$maxSize");
             $start += pow(2, (32 - $maxSize));
         }
-        return $result;
+        return $result[0];
+    }
+
+    private function iMask($s)
+    {
+        return base_convert((pow(2, 32) - pow(2, (32 - $s))), 10, 16);
     }
 
     /**
@@ -114,7 +114,8 @@ class NetworkExternal extends Network {
      *
      * @return NetworkExternal
      */
-    public function setAbuseEntity($abuseEntity) {
+    public function setAbuseEntity($abuseEntity)
+    {
         $this->abuse_entity = $abuseEntity;
 
         return $this;
@@ -125,7 +126,8 @@ class NetworkExternal extends Network {
      *
      * @return string
      */
-    public function getAbuseEntity() {
+    public function getAbuseEntity()
+    {
         return $this->abuse_entity;
     }
 
@@ -136,7 +138,8 @@ class NetworkExternal extends Network {
      *
      * @return NetworkExternal
      */
-    public function setAbuseEntityEmails($abuseEntityEmails) {
+    public function setAbuseEntityEmails($abuseEntityEmails)
+    {
         $this->abuse_entity_emails = $abuseEntityEmails;
 
         return $this;
@@ -147,7 +150,8 @@ class NetworkExternal extends Network {
      *
      * @return array
      */
-    public function getAbuseEntityEmails() {
+    public function getAbuseEntityEmails()
+    {
         return $this->abuse_entity_emails;
     }
 
@@ -158,7 +162,8 @@ class NetworkExternal extends Network {
      *
      * @return NetworkExternal
      */
-    public function setStartAddress($startAddress) {
+    public function setStartAddress($startAddress)
+    {
         $this->start_address = $startAddress;
 
         return $this;
@@ -169,7 +174,8 @@ class NetworkExternal extends Network {
      *
      * @return string
      */
-    public function getStartAddress() {
+    public function getStartAddress()
+    {
         return $this->start_address;
     }
 
@@ -180,7 +186,8 @@ class NetworkExternal extends Network {
      *
      * @return NetworkExternal
      */
-    public function setEndAddress($endAddress) {
+    public function setEndAddress($endAddress)
+    {
         $this->end_address = $endAddress;
 
         return $this;
@@ -191,7 +198,8 @@ class NetworkExternal extends Network {
      *
      * @return string
      */
-    public function getEndAddress() {
+    public function getEndAddress()
+    {
         return $this->end_address;
     }
 
@@ -202,7 +210,8 @@ class NetworkExternal extends Network {
      *
      * @return NetworkExternal
      */
-    public function setCountry($country) {
+    public function setCountry($country)
+    {
         $this->country = $country;
 
         return $this;
@@ -213,7 +222,8 @@ class NetworkExternal extends Network {
      *
      * @return string
      */
-    public function getCountry() {
+    public function getCountry()
+    {
         return $this->country;
     }
 
@@ -223,7 +233,8 @@ class NetworkExternal extends Network {
      * @param \CertUnlp\NgenBundle\Entity\Network\NetworkEntity $network_entity
      * @return Network
      */
-    public function setNetworkEntity(\CertUnlp\NgenBundle\Entity\Network\NetworkEntity $network_entity = null) {
+    public function setNetworkEntity(\CertUnlp\NgenBundle\Entity\Network\NetworkEntity $network_entity = null)
+    {
         $this->network_entity = $network_entity;
 
         return $this;
@@ -232,17 +243,20 @@ class NetworkExternal extends Network {
     /**
      * Get network_entity
      *
-     * @return \CertUnlp\NgenBundle\Entity\Network\NetworkEntity 
+     * @return \CertUnlp\NgenBundle\Entity\Network\NetworkEntity
      */
-    public function getNetworkEntity() {
+    public function getNetworkEntity()
+    {
         return $this->network_entity;
     }
 
-    public function isInternal() {
+    public function isInternal()
+    {
         return false;
     }
 
-    public function isExternal() {
+    public function isExternal()
+    {
         return true;
     }
 

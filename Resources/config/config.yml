@@ -90,10 +90,10 @@ nelmio_api_doc:
 
 
 braincrafted_bootstrap:
-    assets_dir: %kernel.root_dir%/../vendor/twbs/bootstrap
-    jquery_path: %kernel.root_dir%/../vendor/components/jquery/jquery.min.js
+    assets_dir: "%kernel.root_dir%/../vendor/twbs/bootstrap"
+    jquery_path: "%kernel.root_dir%/../vendor/components/jquery/jquery.min.js"
 #    less_filter: less
-    fonts_dir: %kernel.root_dir%/../web/fonts
+    fonts_dir: "%kernel.root_dir%/../web/fonts"
     icon_prefix: fa
     auto_configure:
         assetic: true
@@ -102,7 +102,7 @@ braincrafted_bootstrap:
         knp_paginator: true
     customize:
         variables_file: ~
-        bootstrap_output: %kernel.root_dir%/Resources/less/bootstrap.less
+        bootstrap_output: "%kernel.root_dir%/Resources/less/bootstrap.less"
         bootstrap_template: BraincraftedBootstrapBundle:Bootstrap:bootstrap.less.twig
         
 fos_comment:

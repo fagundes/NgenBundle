@@ -11,10 +11,10 @@
 
 namespace CertUnlp\NgenBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -50,13 +50,9 @@ class CertUnlpNgenExtension extends Extension {
 
     private function setHostParameter($container, $config) {
 
-        $container->setParameter('cert_unlp.ngen.host.internal.class', $config['hosts']['internal']['class']);
-        $container->setParameter('cert_unlp.ngen.host.external.class', $config['hosts']['external']['class']);
-        $container->setParameter('cert_unlp.ngen.host.internal.handler.class', $config['hosts']['internal']['handler']['class']);
-        $container->setParameter('cert_unlp.ngen.host.external.handler.class', $config['hosts']['external']['handler']['class']);
-        $container->setParameter('cert_unlp.ngen.host.internal.form_type.class', $config['hosts']['internal']['form_type']['class']);
-        $container->setParameter('cert_unlp.ngen.host.external.form_type.class', $config['hosts']['external']['form_type']['class']);
-        $container->setParameter('cert_unlp.ngen.host.factory.class', $config['hosts']['factory']['class']);
+        $container->setParameter('cert_unlp.ngen.host.class', $config['hosts']['class']);
+        $container->setParameter('cert_unlp.ngen.host.handler.class', $config['hosts']['handler']['class']);
+        $container->setParameter('cert_unlp.ngen.host.form_type.class', $config['hosts']['form_type']['class']);
     }
 
     private function setIncidentParameter($container, $config) {
@@ -105,17 +101,19 @@ class CertUnlpNgenExtension extends Extension {
     }
 
     private function setNetworkParameter($container, $config) {
-        $container->setParameter('cert_unlp.ngen.network.class', $config['networks']['class']);
-        $container->setParameter('cert_unlp.ngen.network.default_network', $config['networks']['default_network']);
-        $container->setParameter('cert_unlp.ngen.network.handler.class', $config['networks']['handler']['class']);
-        $container->setParameter('cert_unlp.ngen.network.validator.class', $config['networks']['validator']['class']);
-        $container->setParameter('cert_unlp.ngen.network.form_type.class', $config['networks']['form_type']['class']);
+        $container->setParameter('cert_unlp.ngen.network.internal.class', $config['networks']['internal']['class']);
+        $container->setParameter('cert_unlp.ngen.network.internal.handler.class', $config['networks']['internal']['handler']['class']);
+        $container->setParameter('cert_unlp.ngen.network.internal.form_type.class', $config['networks']['internal']['form_type']['class']);
+
+        $container->setParameter('cert_unlp.ngen.network.external.class', $config['networks']['external']['class']);
+        $container->setParameter('cert_unlp.ngen.network.external.handler.class', $config['networks']['external']['handler']['class']);
+        $container->setParameter('cert_unlp.ngen.network.external.form_type.class', $config['networks']['external']['form_type']['class']);
     }
 
     private function setNetworkEntityParameter($container, $config) {
-        $container->setParameter('cert_unlp.ngen.network_entity.class', $config['network_entity']['class']);
-        $container->setParameter('cert_unlp.ngen.network_entity.handler.class', $config['network_entity']['handler']['class']);
-        $container->setParameter('cert_unlp.ngen.network_entity.form_type.class', $config['network_entity']['form_type']['class']);
+        $container->setParameter('cert_unlp.ngen.network.entity.class', $config['networks']['entity']['class']);
+        $container->setParameter('cert_unlp.ngen.network.entity.handler.class', $config['networks']['entity']['handler']['class']);
+        $container->setParameter('cert_unlp.ngen.network.entity.form_type.class', $config['networks']['entity']['form_type']['class']);
     }
 
     private function setNetworkAdminParameter($container, $config) {

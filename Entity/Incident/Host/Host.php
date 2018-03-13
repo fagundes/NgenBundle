@@ -11,27 +11,19 @@
 
 namespace CertUnlp\NgenBundle\Entity\Incident\Host;
 
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use CertUnlp\NgenBundle\Validator\Constraints as CustomAssert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use CertUnlp\NgenBundle\Model\ReporterInterface;
-use CertUnlp\NgenBundle\Model\IncidentInterface;
 use CertUnlp\NgenBundle\Model\NetworkInterface;
+use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\HttpFoundation\File\File;
 use JMS\Serializer\Annotation as JMS;
-use Doctrine\ORM\Mapping\MappedSuperclass;
 
 /**
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
  * @JMS\ExclusionPolicy("all")
  * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="discr", type="string")
- * @ORM\DiscriminatorMap({"host"="host","internal" = "HostInternal", "external" = "HostExternal"})
  */
-class Host {
+class Host
+{
 
     /**
      * @var integer
@@ -51,6 +43,13 @@ class Host {
      * @JMS\Groups({"api"})
      */
     protected $ip;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Model\NetworkInterface", inversedBy="hosts")
+     * @JMS\Expose
+     * @JMS\Groups({"api"})
+     */
+    private $network;
 
     /**
      * @var \DateTime
@@ -93,8 +92,8 @@ class Host {
 
     /**
      * @var string
-     * 
-     * @Gedmo\Slug(fields={"ip"},separator="_")     
+     *
+     * @Gedmo\Slug(fields={"ip"},separator="_")
      * @ORM\Column(name="slug", type="string", length=100,nullable=true)
      * @JMS\Expose
      * @JMS\Groups({"api"})
@@ -104,13 +103,15 @@ class Host {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getSlug();
     }
 
@@ -118,9 +119,10 @@ class Host {
      * Set ip
      *
      * @param string $ip
-     * @return Incident
+     * @return Host
      */
-    public function setIp($ip) {
+    public function setIp($ip)
+    {
         $this->ip = $ip;
         return $this;
     }
@@ -128,9 +130,10 @@ class Host {
     /**
      * Get ip
      *
-     * @return string 
+     * @return string
      */
-    public function getIp() {
+    public function getIp()
+    {
         return $this->ip;
     }
 
@@ -138,9 +141,10 @@ class Host {
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return Incident
+     * @return Host
      */
-    public function setCreatedAt($createdAt) {
+    public function setCreatedAt($createdAt)
+    {
         $this->createdAt = $createdAt;
 
         return $this;
@@ -149,9 +153,10 @@ class Host {
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
-    public function getCreatedAt() {
+    public function getCreatedAt()
+    {
         return $this->createdAt;
     }
 
@@ -159,9 +164,10 @@ class Host {
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return Incident
+     * @return Host
      */
-    public function setUpdatedAt($updatedAt) {
+    public function setUpdatedAt($updatedAt)
+    {
         $this->updatedAt = $updatedAt;
 
         return $this;
@@ -170,9 +176,10 @@ class Host {
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
-    public function getUpdatedAt() {
+    public function getUpdatedAt()
+    {
         return $this->updatedAt;
     }
 
@@ -182,8 +189,9 @@ class Host {
      * @param \CertUnlp\NgenBundle\Model\NetworkInterface $network
      * @return Incident
      */
-    public function setNetwork(NetworkInterface $network = null) {
-        
+    public function setNetwork(NetworkInterface $network = null)
+    {
+
     }
 
     /**
@@ -191,16 +199,18 @@ class Host {
      *
      * @return \CertUnlp\NgenBundle\Model\NetworkInterface
      */
-    public function getNetwork() {
-        
+    public function getNetwork()
+    {
+
     }
 
     /**
      * Get network
      *
      */
-    public function getNetworkAdmin() {
-        
+    public function getNetworkAdmin()
+    {
+
     }
 
     /**
@@ -210,7 +220,8 @@ class Host {
      *
      * @return Incident
      */
-    public function setCommentThread(\CertUnlp\NgenBundle\Entity\IncidentCommentThread $commentThread = null) {
+    public function setCommentThread(\CertUnlp\NgenBundle\Entity\IncidentCommentThread $commentThread = null)
+    {
         $this->comment_thread = $commentThread;
 
         return $this;
@@ -221,19 +232,23 @@ class Host {
      *
      * @return \CertUnlp\NgenBundle\Entity\IncidentCommentThread
      */
-    public function getCommentThread() {
+    public function getCommentThread()
+    {
         return $this->comment_thread;
     }
 
-    public function getEmails() {
+    public function getEmails()
+    {
         return [];
     }
 
-    public function isInternal() {
+    public function isInternal()
+    {
         return false;
     }
 
-    public function isExternal() {
+    public function isExternal()
+    {
         return false;
     }
 
@@ -243,7 +258,8 @@ class Host {
      * @param string $slug
      * @return Incident
      */
-    public function setSlug($slug) {
+    public function setSlug($slug)
+    {
         $this->slug = $slug;
 
         return $this;
@@ -252,9 +268,10 @@ class Host {
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
-    public function getSlug() {
+    public function getSlug()
+    {
         return $this->slug;
     }
 
@@ -265,7 +282,8 @@ class Host {
      *
      * @return Host
      */
-    public function addIncident(\CertUnlp\NgenBundle\Entity\Incident\Incident $incident) {
+    public function addIncident(\CertUnlp\NgenBundle\Entity\Incident\Incident $incident)
+    {
         $this->incidents[] = $incident;
 
         return $this;
@@ -276,7 +294,8 @@ class Host {
      *
      * @param \CertUnlp\NgenBundle\Entity\Incident\Incident $incident
      */
-    public function removeIncident(\CertUnlp\NgenBundle\Entity\Incident\Incident $incident) {
+    public function removeIncident(\CertUnlp\NgenBundle\Entity\Incident\Incident $incident)
+    {
         $this->incidents->removeElement($incident);
     }
 
@@ -285,7 +304,8 @@ class Host {
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getIncidents() {
+    public function getIncidents()
+    {
         return $this->incidents;
     }
 
@@ -296,7 +316,8 @@ class Host {
      *
      * @return Host
      */
-    public function setIsActive($isActive) {
+    public function setIsActive($isActive)
+    {
         $this->isActive = $isActive;
 
         return $this;
@@ -307,7 +328,8 @@ class Host {
      *
      * @return boolean
      */
-    public function getIsActive() {
+    public function getIsActive()
+    {
         return $this->isActive;
     }
 
@@ -318,7 +340,8 @@ class Host {
      *
      * @return Host
      */
-    public function addIncidentsAsOrigin(\CertUnlp\NgenBundle\Entity\Incident\Incident $incidentsAsOrigin) {
+    public function addIncidentsAsOrigin(\CertUnlp\NgenBundle\Entity\Incident\Incident $incidentsAsOrigin)
+    {
         $this->incidents_as_origin[] = $incidentsAsOrigin;
 
         return $this;
@@ -329,7 +352,8 @@ class Host {
      *
      * @param \CertUnlp\NgenBundle\Entity\Incident\Incident $incidentsAsOrigin
      */
-    public function removeIncidentsAsOrigin(\CertUnlp\NgenBundle\Entity\Incident\Incident $incidentsAsOrigin) {
+    public function removeIncidentsAsOrigin(\CertUnlp\NgenBundle\Entity\Incident\Incident $incidentsAsOrigin)
+    {
         $this->incidents_as_origin->removeElement($incidentsAsOrigin);
     }
 
@@ -338,7 +362,8 @@ class Host {
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getIncidentsAsOrigin() {
+    public function getIncidentsAsOrigin()
+    {
         return $this->incidents_as_origin;
     }
 
@@ -349,7 +374,8 @@ class Host {
      *
      * @return Host
      */
-    public function addIncidentsAsDestination(\CertUnlp\NgenBundle\Entity\Incident\Incident $incidentsAsDestination) {
+    public function addIncidentsAsDestination(\CertUnlp\NgenBundle\Entity\Incident\Incident $incidentsAsDestination)
+    {
         $this->incidents_as_destination[] = $incidentsAsDestination;
 
         return $this;
@@ -360,7 +386,8 @@ class Host {
      *
      * @param \CertUnlp\NgenBundle\Entity\Incident\Incident $incidentsAsDestination
      */
-    public function removeIncidentsAsDestination(\CertUnlp\NgenBundle\Entity\Incident\Incident $incidentsAsDestination) {
+    public function removeIncidentsAsDestination(\CertUnlp\NgenBundle\Entity\Incident\Incident $incidentsAsDestination)
+    {
         $this->incidents_as_destination->removeElement($incidentsAsDestination);
     }
 
@@ -369,14 +396,16 @@ class Host {
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getIncidentsAsDestination() {
+    public function getIncidentsAsDestination()
+    {
         return $this->incidents_as_destination;
     }
 
     /**
      * Constructor
      */
-    public function __construct($ip = null) {
+    public function __construct($ip = null)
+    {
         $this->ip = $ip;
         $this->incidents_as_origin = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incidents_as_destination = new \Doctrine\Common\Collections\ArrayCollection();

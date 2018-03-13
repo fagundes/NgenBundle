@@ -11,27 +11,51 @@
 
 namespace CertUnlp\NgenBundle\Services\Api\Handler\Incident\Host;
 
+use CertUnlp\NgenBundle\Services\Api\Handler\Handler;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormFactoryInterface;
-use \CertUnlp\NgenBundle\Exception\InvalidFormException;
-use Symfony\Component\Security\Core\SecurityContext;
-use CertUnlp\NgenBundle\Services\Api\Handler\Handler;
-use CertUnlp\NgenBundle\Services\Api\Handler\UserHandler;
 
-abstract class HostHandler extends Handler {
+class HostHandler extends Handler
+{
+
+    public function __construct(ObjectManager $om, $entityClass, $entityType, FormFactoryInterface $formFactory, $network_handler)
+    {
+        $this->network_handler = $network_handler;
+        parent::__construct($om, $entityClass, $entityType, $formFactory);
+    }
 
     public function createEntityInstance($params = []) {
-        $incident = new $this->entityClass();
+        $host = new $this->entityClass();
 
-        $incident->setOrigin($this->host_handler->createEntityInstance($params['origin']));
-        $incident->setDestination($this->host_handler->createEntityInstance($params['destination']));
-        var_dump($incident);
+
+        var_dump($incident->getOrigin()->getIp());
         die;
         return $incident;
     }
 
-    protected function prepareToDeletion($incident, array $parameters) {
-        $incident->close();
+    public function prepareToDeletion($incident_report, array $parameters = null)
+    {
+        $incident_report->setIsActive(FALSE);
+    }
+
+    protected function checkIfExists($incident, $method)
+    {
+        $incidentDB = $this->repository->findOneBy(['isClosed' => false, 'ip' => $incident->getIp(), 'type' => $incident->getType()]);
+        if ($incidentDB && $method == 'POST') {
+            if ($incident->getFeed()->getSlug() == "shadowserver") {
+                $incidentDB->setSendReport(false);
+            } else {
+                $incidentDB->setSendReport($incident->getSendReport());
+            }
+
+            if ($incident->getEvidenceFile()) {
+                $incidentDB->setEvidenceFile($incident->getEvidenceFile());
+            }
+
+            $incident = $incidentDB;
+            $incident->setLastTimeDetected(new \DateTime('now'));
+        }
+        return $incident;
     }
 
 }

@@ -17,19 +17,16 @@
 
 namespace CertUnlp\NgenBundle\Controller\Frontend\Network;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use CertUnlp\NgenBundle\Entity\Network\NetworkEntity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use CertUnlp\NgenBundle\Form\NetworkEntityType;
-use CertUnlp\NgenBundle\Entity\Network\NetworkEntity;
+use Symfony\Component\HttpFoundation\Request;
 
 class NetworkEntityFrontendController extends Controller {
 
     public function getFrontendController() {
-        return $this->get('cert_unlp.ngen.network_entity.frontend.controller');
+        return $this->get('cert_unlp.ngen.network.entity.frontend.controller');
     }
 
     /**
