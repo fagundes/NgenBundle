@@ -16,12 +16,13 @@ namespace CertUnlp\NgenBundle\Services\Rdap;
 class Entity
 {
     private $object;
+    private $entities;
 
     public function __construct($entity_object)
     {
-        $this->object = $entity_object;
-        if (isset($this->object->entities)) {
-            foreach ($this->object->entities as $entity) {
+        $this->setObject($entity_object);
+        if (isset($this->getObject()->entities)) {
+            foreach ($this->getObject()->entities as $entity) {
 
                 $this->entities[] = new Entity($entity);
             }
@@ -32,13 +33,13 @@ class Entity
 
     public function __toString()
     {
-        return $this->object->name . "( " . $this->object->handle . " )";
+        return $this->getObject()->name . "( " . $this->getObject()->handle . " )";
     }
 
     public function getVcard()
     {
-        if (isset($this->object->vcardArray)) {
-            return $this->object->vcardArray[1];
+        if (isset($this->getObject()->vcardArray)) {
+            return $this->getObject()->vcardArray[1];
         }
         return [];
     }
@@ -48,8 +49,8 @@ class Entity
      */
     public function getLinks()
     {
-        if (isset($this->object->links)) {
-            return $this->object->links;
+        if (isset($this->getObject()->links)) {
+            return $this->getObject()->links;
         }
         return [];
     }
@@ -68,8 +69,8 @@ class Entity
 
     public function getRoles()
     {
-        if (isset($this->object->roles)) {
-            return $this->object->roles;
+        if (isset($this->getObject()->roles)) {
+            return $this->getObject()->roles;
         }
         return [];
     }
@@ -77,8 +78,8 @@ class Entity
     public function getRolesAsString()
     {
         $string = "";
-        if (isset($this->object->roles)) {
-            foreach ($this->object->roles as $role) {
+        if (isset($this->getObject()->roles)) {
+            foreach ($this->getObject()->roles as $role) {
                 $string .= "$role ";
             }
         }
@@ -90,8 +91,8 @@ class Entity
      */
     public function getHandle()
     {
-        if (isset($this->object->handle)) {
-            return $this->object->handle;
+        if (isset($this->getObject()->handle)) {
+            return $this->getObject()->handle;
         }
         return [];
     }
@@ -139,6 +140,24 @@ class Entity
             $entities = array_merge($entities, $entity->getEntities($callback));
         }
         return $entities;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getObject()
+    {
+        return $this->object;
+    }
+
+    /**
+     * @param mixed $object
+     * @return Entity
+     */
+    public function setObject($object)
+    {
+        $this->object = $object;
+        return $this;
     }
 
 }

@@ -21,12 +21,14 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class CertUnlpNgenExtension extends Extension {
+class CertUnlpNgenExtension extends Extension
+{
 
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container) {
+    public function load(array $configs, ContainerBuilder $container)
+    {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
         $container->setParameter('cert_unlp.ngen.team.mail', $config['team']['mail']);
@@ -48,14 +50,16 @@ class CertUnlpNgenExtension extends Extension {
         $loader->load('services.yml');
     }
 
-    private function setHostParameter($container, $config) {
+    private function setHostParameter(ContainerBuilder $container, $config)
+    {
 
         $container->setParameter('cert_unlp.ngen.host.class', $config['hosts']['class']);
         $container->setParameter('cert_unlp.ngen.host.handler.class', $config['hosts']['handler']['class']);
         $container->setParameter('cert_unlp.ngen.host.form_type.class', $config['hosts']['form_type']['class']);
     }
 
-    private function setIncidentParameter($container, $config) {
+    private function setIncidentParameter(ContainerBuilder $container, $config)
+    {
 
         $container->setParameter('cert_unlp.ngen.incident.class', $config['incidents']['class']);
         $container->setParameter('cert_unlp.ngen.incident.handler.class', $config['incidents']['handler']['class']);
@@ -78,19 +82,22 @@ class CertUnlpNgenExtension extends Extension {
         $container->setParameter('cert_unlp.ngen.incident.mailer.password', $config['incidents']['mailer']['password']);
     }
 
-    private function setFeedParameter($container, $config) {
+    private function setFeedParameter(ContainerBuilder $container, $config)
+    {
         $container->setParameter('cert_unlp.ngen.incident.feed.class', $config['incidents']['feeds']['class']);
         $container->setParameter('cert_unlp.ngen.incident.feed.handler.class', $config['incidents']['feeds']['handler']['class']);
         $container->setParameter('cert_unlp.ngen.incident.feed.form_type.class', $config['incidents']['feeds']['form_type']['class']);
     }
 
-    private function setStateParameter($container, $config) {
+    private function setStateParameter(ContainerBuilder $container, $config)
+    {
         $container->setParameter('cert_unlp.ngen.incident.state.class', $config['incidents']['states']['class']);
         $container->setParameter('cert_unlp.ngen.incident.state.handler.class', $config['incidents']['states']['handler']['class']);
         $container->setParameter('cert_unlp.ngen.incident.state.form_type.class', $config['incidents']['states']['form_type']['class']);
     }
 
-    private function setFeedShadowserverParameter($container, $config) {
+    private function setFeedShadowserverParameter(ContainerBuilder $container, $config)
+    {
         $container->setParameter('cert_unlp.ngen.feed.path', $config['feeds']['path']);
         $container->setParameter('cert_unlp.ngen.feed.shadowserver.enabled', $config['feeds']['shadowserver']['enabled']);
         $container->setParameter('cert_unlp.ngen.feed.shadowserver.class', $config['feeds']['shadowserver']['class']);
@@ -100,7 +107,13 @@ class CertUnlpNgenExtension extends Extension {
         $container->setParameter('cert_unlp.ngen.feed.shadowserver.client.password', $config['feeds']['shadowserver']['client']['password']);
     }
 
-    private function setNetworkParameter($container, $config) {
+    private function setNetworkParameter(ContainerBuilder $container, $config)
+    {
+
+        $container->setParameter('cert_unlp.ngen.network.class', $config['networks']['class']);
+        $container->setParameter('cert_unlp.ngen.network.handler.class', $config['networks']['handler']['class']);
+        $container->setParameter('cert_unlp.ngen.network.form_type.class', $config['networks']['form_type']['class']);
+
         $container->setParameter('cert_unlp.ngen.network.internal.class', $config['networks']['internal']['class']);
         $container->setParameter('cert_unlp.ngen.network.internal.handler.class', $config['networks']['internal']['handler']['class']);
         $container->setParameter('cert_unlp.ngen.network.internal.form_type.class', $config['networks']['internal']['form_type']['class']);
@@ -110,31 +123,36 @@ class CertUnlpNgenExtension extends Extension {
         $container->setParameter('cert_unlp.ngen.network.external.form_type.class', $config['networks']['external']['form_type']['class']);
     }
 
-    private function setNetworkEntityParameter($container, $config) {
+    private function setNetworkEntityParameter(ContainerBuilder $container, $config)
+    {
         $container->setParameter('cert_unlp.ngen.network.entity.class', $config['networks']['entity']['class']);
         $container->setParameter('cert_unlp.ngen.network.entity.handler.class', $config['networks']['entity']['handler']['class']);
         $container->setParameter('cert_unlp.ngen.network.entity.form_type.class', $config['networks']['entity']['form_type']['class']);
     }
 
-    private function setNetworkAdminParameter($container, $config) {
+    private function setNetworkAdminParameter(ContainerBuilder $container, $config)
+    {
         $container->setParameter('cert_unlp.ngen.network.admin.class', $config['networks']['admin']['class']);
         $container->setParameter('cert_unlp.ngen.network.admin.handler.class', $config['networks']['admin']['handler']['class']);
         $container->setParameter('cert_unlp.ngen.network.admin.form_type.class', $config['networks']['admin']['form_type']['class']);
     }
 
-    private function setTypeParameter($container, $config) {
+    private function setTypeParameter(ContainerBuilder $container, $config)
+    {
         $container->setParameter('cert_unlp.ngen.incident.type.class', $config['incidents']['types']['class']);
         $container->setParameter('cert_unlp.ngen.incident.type.handler.class', $config['incidents']['types']['handler']['class']);
         $container->setParameter('cert_unlp.ngen.incident.type.form_type.class', $config['incidents']['types']['form_type']['class']);
     }
 
-    private function setTypeReportParameter($container, $config) {
+    private function setTypeReportParameter(ContainerBuilder $container, $config)
+    {
         $container->setParameter('cert_unlp.ngen.incident.type.report.class', $config['incidents']['types']['reports']['class']);
         $container->setParameter('cert_unlp.ngen.incident.type.report.handler.class', $config['incidents']['types']['reports']['handler']['class']);
         $container->setParameter('cert_unlp.ngen.incident.type.report.form_type.class', $config['incidents']['types']['reports']['form_type']['class']);
     }
 
-    private function setUserParameter($container, $config) {
+    private function setUserParameter(ContainerBuilder $container, $config)
+    {
         $container->setParameter('cert_unlp.ngen.user.class', $config['users']['class']);
         $container->setParameter('cert_unlp.ngen.user.handler.class', $config['users']['handler']['class']);
         $container->setParameter('cert_unlp.ngen.user.form_type.class', $config['users']['form_type']['class']);

@@ -25,7 +25,7 @@ abstract class Handler implements ApiHandlerInterface
     protected $formFactory;
     protected $entityType;
 
-    public function __construct(ObjectManager $om, $entityClass, $entityType, FormFactoryInterface $formFactory)
+    public function __construct(ObjectManager $om, string $entityClass, string $entityType, FormFactoryInterface $formFactory)
     {
         $this->om = $om;
         $this->entityClass = $entityClass;
@@ -37,20 +37,7 @@ abstract class Handler implements ApiHandlerInterface
     /**
      * Get a Entity by id.
      *
-     * @param mixed $id
-     *
-     * @return Entity
-     */
-    public function get(array $parameters)
-    {
-        return $this->repository->findOneBy($parameters);
-    }
-
-    /**
-     * Get a Entity by id.
-     *
-     * @param mixed $id
-     *
+     * @param array $parameters
      * @return Entity
      */
     public function getOrCreate(array $parameters)
@@ -63,8 +50,52 @@ abstract class Handler implements ApiHandlerInterface
     }
 
     /**
+     * Get a Entity by id.
+     *
+     * @param array $parameters
+     * @return Entity
+     */
+    public function get(array $parameters)
+    {
+        return $this->repository->findOneBy($parameters);
+    }
+
+    public function createEntityInstance($parameters = [])
+    {
+        if ($parameters) {
+            try {
+                $refMethod = new \ReflectionMethod($this->entityClass, '__construct');
+            } catch (\ReflectionException $e) {
+                var_dump($e);
+                die;
+            }
+            $params = $refMethod->getParameters();
+            $re_args = array();
+
+            foreach ($params as $params_value) {
+                foreach ($params_value as $name => $param_name) {
+                    $re_args[$param_name] = $parameters[$param_name];
+                }
+            }
+
+            try {
+                $refClass = new \ReflectionClass($this->entityClass);
+            } catch (\ReflectionException $e) {
+                var_dump($e);
+                die;
+            }
+            $entity = $refClass->newInstanceArgs((array)$re_args);
+        } else {
+            $entity = new $this->entityClass();
+        }
+        return $entity;
+    }
+
+    /**
      * Get a list of entities.
      *
+     * @param array $params
+     * @param array $order
      * @param int $limit the limit of the result
      * @param int $offset starting from the offset
      *
@@ -80,6 +111,7 @@ abstract class Handler implements ApiHandlerInterface
      *
      * @param array $parameters
      *
+     * @param bool $csrf_protection
      * @return Entity
      */
     public function post(array $parameters, $csrf_protection = false)
@@ -88,6 +120,38 @@ abstract class Handler implements ApiHandlerInterface
 
         return $this->processForm($entity_class_instance, $parameters, 'POST', $csrf_protection);
     }
+
+    /**
+     * Processes the form.
+     *
+     * @param Entity $entity_class_instance
+     * @param array $parameters
+     * @param String $method
+     *
+     * @param bool $csrf_protection
+     * @return Entity
+     *
+     */
+    protected function processForm($entity_class_instance, $parameters, $method = "PUT", $csrf_protection = true)
+    {
+
+        $form = $this->formFactory->create(new $this->entityType(), $entity_class_instance, array('csrf_protection' => $csrf_protection, 'method' => $method));
+        $form->submit($parameters, 'PATCH' !== $method);
+
+        if ($form->isValid()) {
+            $entity_class_instance = $form->getData();
+
+            $entity_class_instance = $this->checkIfExists($entity_class_instance, $method);
+            $this->om->persist($entity_class_instance);
+            $this->om->flush($entity_class_instance);
+
+            return $entity_class_instance;
+        }
+        throw new InvalidFormException
+        ('Invalid submitted data', $form);
+    }
+
+    abstract protected function checkIfExists($entity_class_instance, $method);
 
     /**
      * Edit a Entity.
@@ -103,16 +167,16 @@ abstract class Handler implements ApiHandlerInterface
     }
 
     /**
-     * Partially update a Entity.
+     * Delete a Network.
      *
-     * @param Entity $entity_class_instance
+     * @param $entity
      * @param array $parameters
      *
      * @return Entity
      */
-    public function patch($entity_class_instance, array $parameters = null)
+    public function desactivate($entity, array $parameters = null)
     {
-        return $this->processForm($entity_class_instance, $parameters, 'PATCH', false);
+        return $this->delete($entity, $parameters);
     }
 
     /**
@@ -139,85 +203,31 @@ abstract class Handler implements ApiHandlerInterface
      */
     abstract protected function prepareToDeletion($entity_class_instance, array $parameters);
 
-    abstract protected function checkIfExists($entity_class_instance, $method);
-
     /**
-     * Processes the form.
+     * Partially update a Entity.
      *
      * @param Entity $entity_class_instance
      * @param array $parameters
-     * @param String $method
      *
      * @return Entity
-     *
-     * @throws \CertUnlp\NgenBundle\Exception\InvalidFormException
      */
-    protected function processForm($entity_class_instance, $parameters, $method = "PUT", $csrf_protection = true)
+    public function patch($entity_class_instance, array $parameters = null)
     {
-
-        $form = $this->formFactory->create(new $this->entityType(), $entity_class_instance, array('csrf_protection' => $csrf_protection, 'method' => $method));
-        $form->submit($parameters, 'PATCH' !== $method);
-
-        if ($form->isValid()) {
-            $entity_class_instance = $form->getData();
-
-            $entity_class_instance = $this->checkIfExists($entity_class_instance, $method);
-            $this->om->persist($entity_class_instance);
-            $this->om->flush($entity_class_instance);
-
-            return $entity_class_instance;
-        }
-        throw new InvalidFormException
-        ('Invalid submitted data', $form);
-    }
-
-    public function createEntityInstance($parameters = [])
-    {
-
-        if ($parameters) {
-            $refMethod = new \ReflectionMethod($this->entityClass, '__construct');
-            $params = $refMethod->getParameters();
-            $re_args = array();
-
-            foreach ($params as $params_value) {
-                foreach ($params_value as $name => $param_name) {
-                    $re_args[$param_name] = $parameters[$param_name];
-                }
-            }
-
-            $refClass = new \ReflectionClass($this->entityClass);
-            $entity = $refClass->newInstanceArgs((array)$re_args);
-        } else {
-            $entity = new $this->entityClass();
-        }
-        return $entity;
+        return $this->processForm($entity_class_instance, $parameters, 'PATCH', false);
     }
 
     /**
      * Delete a Network.
      *
-     * @param NetworkInterface $network
+     * @param $entity
      * @param array $parameters
      *
-     * @return NetworkInterface
+     * @return Entity
      */
-    public function desactivate($network, array $parameters = null)
+    public function activate($entity, array $parameters = null)
     {
-        return $this->delete($network, $parameters);
-    }
-
-    /**
-     * Delete a Network.
-     *
-     * @param NetworkInterface $network
-     * @param array $parameters
-     *
-     * @return NetworkInterface
-     */
-    public function activate($network, array $parameters = null)
-    {
-        $network->setIsActive(TRUE);
-        return $this->patch($network, $parameters);
+        $entity->setIsActive(TRUE);
+        return $this->patch($entity, $parameters);
     }
 
 }

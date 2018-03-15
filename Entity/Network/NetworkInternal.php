@@ -19,7 +19,7 @@ use JMS\Serializer\Annotation as JMS;
  * Network
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="CertUnlp\NgenBundle\Entity\Network\NetworkRepository")
+ * @ORM\Entity()
  * @JMS\ExclusionPolicy("all")
  */
 class NetworkInternal extends Network implements NetworkInterface

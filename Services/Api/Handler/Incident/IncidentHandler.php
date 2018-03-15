@@ -17,7 +17,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Security\Core\SecurityContext;
 
-class IncidentHandler extends Handler {
+class IncidentHandler extends Handler
+{
 
     private $user_handler;
     private $context;
@@ -30,21 +31,25 @@ class IncidentHandler extends Handler {
         $this->context = $context;
     }
 
-    public function createEntityInstance($params = []) {
-        $incident = new $this->entityClass();
-
+    /**
+     * @param array $params
+     * @return mixed|null|object
+     */
+    public function createEntityInstance($params = [])
+    {
+        $incident = parent::createEntityInstance();
         $incident->setOrigin($this->host_handler->getOrCreate(['ip' => $params['origin']]));
         $incident->setDestination($this->host_handler->getOrCreate(['ip' => $params['destination']]));
-        var_dump($incident->getOrigin()->getIp());
-        die;
         return $incident;
     }
 
-    public function getUser() {
+    public function getUser()
+    {
         return $this->context->getToken() ? $this->context->getToken()->getUser() : 'anon.';
     }
 
-    protected function prepareToDeletion($incident, array $parameters) {
+    protected function prepareToDeletion($incident, array $parameters)
+    {
         $incident->close();
     }
 
@@ -56,7 +61,8 @@ class IncidentHandler extends Handler {
      *
      * @return IncidentInterface
      */
-    public function changeState($incident, $state) {
+    public function changeState($incident, $state)
+    {
 
         $incident->setState($state);
         return $this->patch($incident, []);
@@ -66,14 +72,15 @@ class IncidentHandler extends Handler {
      * Processes the form.
      *
      * @param IncidentInterface $incident
-     * @param array         $parameters
-     * @param String        $method
+     * @param array $parameters
+     * @param String $method
      *
      * @return IncidentInterface
      *
      * @throws \CertUnlp\NgenBundle\Exception\InvalidFormException
      */
-    protected function processForm($incident, $parameters, $method = "PUT", $csrf_protection = true) {
+    protected function processForm($incident, $parameters, $method = "PUT", $csrf_protection = true)
+    {
         if (!isset($parameters['reporter']) || !$parameters['reporter']) {
             $parameters['reporter'] = $this->getReporter();
         }
@@ -82,7 +89,8 @@ class IncidentHandler extends Handler {
         return parent::processForm($incident, $parameters, $method, $csrf_protection);
     }
 
-    protected function getReporter() {
+    protected function getReporter()
+    {
         if ($this->getUser() != 'anon.') {
             return strval($this->getUser()->getId());
         } else {
@@ -90,7 +98,8 @@ class IncidentHandler extends Handler {
         }
     }
 
-    public function closeOldIncidents($days = 10) {
+    public function closeOldIncidents($days = 10)
+    {
         $incidents = $this->all(['isClosed' => false]);
         $state = $this->om->getRepository('CertUnlp\NgenBundle\Entity\IncidentState')->findOneBySlug('closed_by_inactivity');
         $closedIncidents = [];
@@ -109,11 +118,13 @@ class IncidentHandler extends Handler {
         return $closedIncidents;
     }
 
-    public function renotificateIncidents() {
+    public function renotificateIncidents()
+    {
         return $this->repository->findRenotificables();
     }
 
-    protected function checkIfExists($incident, $method) {
+    protected function checkIfExists($incident, $method)
+    {
         $incidentDB = $this->repository->findOneBy(['isClosed' => false, 'ip' => $incident->getIp(), 'type' => $incident->getType()]);
         if ($incidentDB && $method == 'POST') {
             if ($incident->getFeed()->getSlug() == "shadowserver") {

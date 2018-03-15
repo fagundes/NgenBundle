@@ -8,25 +8,26 @@
 
 namespace CertUnlp\NgenBundle\Services\Rdap;
 
-use CertUnlp\NgenBundle\Services\Rdap\Entity;
-use RecursiveArrayIterator;
-
 /**
  * Description of Entities
  *
  * @author dam
  */
-class Entities {
+class Entities
+{
 
-    public function __construct($entities = []) {
+    private $entities;
+
+    public function __construct($entities = [])
+    {
         $this->entities = [];
         foreach ($entities as $entity) {
-
             $this->entities[] = new Entity($entity);
         }
     }
 
-    public function getByRole($roles) {
+    public function getByRole($roles)
+    {
         $entities = [];
         foreach ($this->getEntities() as $entity) {
             foreach ($roles as $role) {
@@ -44,7 +45,8 @@ class Entities {
         return $entities;
     }
 
-    public function getOneByRole($roles) {
+    public function getOneByRole($roles)
+    {
         $entities = $this->getByRole($roles);
 
         if ($entities) {
@@ -54,7 +56,8 @@ class Entities {
         return null;
     }
 
-    public function getAbuseEntities() {
+    public function getAbuseEntities()
+    {
 
         $abuse_entities = $this->getByRole(['abuse']);
         $extra_entities = $this->getByRole(['noc', 'technical']);
@@ -62,12 +65,14 @@ class Entities {
         return $abuse_entities ? $abuse_entities : $extra_entities;
     }
 
-    public function getAbuseEntity() {
+    public function getAbuseEntity()
+    {
         $abuse_entities = $this->getAbuseEntities();
         return $abuse_entities ? $abuse_entities[0] : [];
     }
 
-    public function getAbuseEmails() {
+    public function getAbuseEmails()
+    {
         $abuse_emails = [];
         $abuse_entities = $this->getAbuseEntities();
 
@@ -78,11 +83,11 @@ class Entities {
         return $abuse_emails;
     }
 
-    public function getEntities($callback = null) {
-
+    public function getEntities($callback = '')
+    {
         $entities = [];
         foreach ($this->entities as $entity) {
-            $entities = array_merge($entities, $entity->getEntities());
+            $entities = array_merge($entities, $entity->getEntities($callback));
         }
         return $entities;
     }

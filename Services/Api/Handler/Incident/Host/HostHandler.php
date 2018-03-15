@@ -11,51 +11,57 @@
 
 namespace CertUnlp\NgenBundle\Services\Api\Handler\Incident\Host;
 
+use CertUnlp\NgenBundle\Entity\Incident\Host\Host;
 use CertUnlp\NgenBundle\Services\Api\Handler\Handler;
+use CertUnlp\NgenBundle\Services\Api\Handler\Network\NetworkHandler;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormFactoryInterface;
 
 class HostHandler extends Handler
 {
 
-    public function __construct(ObjectManager $om, $entityClass, $entityType, FormFactoryInterface $formFactory, $network_handler)
+    private $network_handler;
+
+    public function __construct(ObjectManager $om, string $entityClass, string $entityType, FormFactoryInterface $formFactory, NetworkHandler $network_handler)
     {
         $this->network_handler = $network_handler;
         parent::__construct($om, $entityClass, $entityType, $formFactory);
     }
 
-    public function createEntityInstance($params = []) {
-        $host = new $this->entityClass();
-
-
-        var_dump($incident->getOrigin()->getIp());
-        die;
-        return $incident;
+    /**
+     * @param array $parameters
+     * @return Host
+     */
+    public function createEntityInstance($parameters = []): Host
+    {
+        $host = parent::createEntityInstance($parameters);
+        $host->setNetwork($this->network_handler->get($parameters));
+        return $host;
     }
 
-    public function prepareToDeletion($incident_report, array $parameters = null)
+    /**
+     * @param Host $host
+     * @param array|null $parameters
+     * @return Host
+     */
+    public function prepareToDeletion($host, array $parameters = null)
     {
-        $incident_report->setIsActive(FALSE);
+        return $host->setIsActive(FALSE);
     }
 
-    protected function checkIfExists($incident, $method)
+    /**
+     * @param Host $host
+     * @param $method
+     * @return Host|null|object
+     */
+    protected function checkIfExists($host, $method)
     {
-        $incidentDB = $this->repository->findOneBy(['isClosed' => false, 'ip' => $incident->getIp(), 'type' => $incident->getType()]);
-        if ($incidentDB && $method == 'POST') {
-            if ($incident->getFeed()->getSlug() == "shadowserver") {
-                $incidentDB->setSendReport(false);
-            } else {
-                $incidentDB->setSendReport($incident->getSendReport());
-            }
-
-            if ($incident->getEvidenceFile()) {
-                $incidentDB->setEvidenceFile($incident->getEvidenceFile());
-            }
-
-            $incident = $incidentDB;
-            $incident->setLastTimeDetected(new \DateTime('now'));
+        $hostDB = $this->repository->findOneBy(['isClosed' => false, 'ip' => $host->getIp(), 'type' => $host->getType()]);
+        if ($hostDB && $method == 'POST') {
+            $host = $hostDB;
+            $host->setLastTimeDetected(new \DateTime('now'));
         }
-        return $incident;
+        return $host;
     }
 
 }

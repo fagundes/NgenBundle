@@ -22,7 +22,7 @@ use JMS\Serializer\Annotation as JMS;
  *
  * @author dam
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="IncidentFeedRepository")
+ * @ORM\Entity()
  * @JMS\ExclusionPolicy("all")
  */
 class IncidentFeed {

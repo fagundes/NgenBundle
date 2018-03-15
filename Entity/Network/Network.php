@@ -56,34 +56,23 @@ class Network
      * @JMS\Expose
      */
     protected $ipMask;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="numeric_ip_mask", type="bigint", options={"unsigned":true})
-     */
-    private $numericIpMask;
-
     /**
      * @var string
      * @ORM\Column(name="ip", type="string", length=40)
      * @JMS\Expose
      */
     protected $ip;
-
     /**
      * @var string
      *
      * @ORM\Column(name="numeric_ip", type="integer",options={"unsigned":true})
      */
     protected $numericIp;
-
     /**
      * @ORM\OneToMany(targetEntity="CertUnlp\NgenBundle\Entity\Incident\Host\Host",mappedBy="network", cascade={"persist","remove"}, fetch="EAGER"))
      * @JMS\Expose
      */
     protected $hosts;
-
     /**
      * @var boolean
      *
@@ -91,7 +80,6 @@ class Network
      * @JMS\Expose
      */
     protected $isActive = true;
-
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
@@ -100,7 +88,6 @@ class Network
      * @JMS\Type("DateTime<'Y-m-d h:m:s'>")
      */
     protected $createdAt;
-
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="update")
@@ -109,6 +96,22 @@ class Network
      * @JMS\Type("DateTime<'Y-m-d h:m:s'>")
      */
     protected $updatedAt;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numeric_ip_mask", type="bigint", options={"unsigned":true})
+     */
+    private $numericIpMask;
+
+    /**
+     * Constructor
+     * @param string $ip
+     */
+    public function __construct($ip = "")
+    {
+        $this->setIp($ip);
+        $this->hosts = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -121,27 +124,13 @@ class Network
     }
 
     /**
-     * Set ipMask
+     * Get isActive
      *
-     * @param string $ipMask
-     * @return Network
+     * @return boolean
      */
-    public function setIpMask($ipMask)
+    public function getIsActive()
     {
-        $this->ipMask = $ipMask;
-        $this->setNumericIpMask(0xffffffff << (32 - $ipMask));
-
-        return $this;
-    }
-
-    /**
-     * Get ipMask
-     *
-     * @return string
-     */
-    public function getIpMask()
-    {
-        return $this->ipMask;
+        return $this->isActive;
     }
 
     /**
@@ -157,24 +146,6 @@ class Network
         return $this;
     }
 
-    /**
-     * Get isActive
-     *
-     * @return boolean
-     */
-    public function getIsActive()
-    {
-        return $this->isActive;
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->hosts = new ArrayCollection();
-    }
-
     public function __toString()
     {
         return $this->getIpAndMask();
@@ -183,6 +154,16 @@ class Network
     public function getIpAndMask()
     {
         return $this->getIp() . "/" . $this->getIpMask();
+    }
+
+    /**
+     * Get ip
+     *
+     * @return string
+     */
+    public function getIp()
+    {
+        return $this->ip;
     }
 
     /**
@@ -204,13 +185,37 @@ class Network
     }
 
     /**
-     * Get ip
+     * Get ipMask
      *
      * @return string
      */
-    public function getIp()
+    public function getIpMask()
     {
-        return $this->ip;
+        return $this->ipMask;
+    }
+
+    /**
+     * Set ipMask
+     *
+     * @param string $ipMask
+     * @return Network
+     */
+    public function setIpMask($ipMask)
+    {
+        $this->ipMask = $ipMask;
+        $this->setNumericIpMask(0xffffffff << (32 - $ipMask));
+
+        return $this;
+    }
+
+    /**
+     * Get numericIp
+     *
+     * @return integer
+     */
+    public function getNumericIp()
+    {
+        return $this->numericIp;
     }
 
     /**
@@ -227,13 +232,13 @@ class Network
     }
 
     /**
-     * Get numericIp
+     * Get numericIpMask
      *
      * @return integer
      */
-    public function getNumericIp()
+    public function getNumericIpMask()
     {
-        return $this->numericIp;
+        return $this->numericIpMask;
     }
 
     /**
@@ -249,16 +254,6 @@ class Network
         return $this;
     }
 
-    /**
-     * Get numericIpMask
-     *
-     * @return integer
-     */
-    public function getNumericIpMask()
-    {
-        return $this->numericIpMask;
-    }
-
     public function equals(NetworkInterface $other = null)
     {
         if ($other) {
@@ -266,6 +261,16 @@ class Network
         } else {
             return false;
         }
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 
     /**
@@ -282,13 +287,13 @@ class Network
     }
 
     /**
-     * Get createdAt
+     * Get updatedAt
      *
      * @return \DateTime
      */
-    public function getCreatedAt()
+    public function getUpdatedAt()
     {
-        return $this->createdAt;
+        return $this->updatedAt;
     }
 
     /**
@@ -302,16 +307,6 @@ class Network
         $this->updatedAt = $updatedAt;
 
         return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
     }
 
     /**

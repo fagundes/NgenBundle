@@ -11,13 +11,12 @@
 
 namespace CertUnlp\NgenBundle\Entity\Incident;
 
+use CertUnlp\NgenBundle\Entity\IncidentState;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use CertUnlp\NgenBundle\Model\ReporterInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\HttpFoundation\File\File;
 use JMS\Serializer\Annotation as JMS;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
@@ -26,7 +25,8 @@ use JMS\Serializer\Annotation as JMS;
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  */
-class Incident {
+class Incident
+{
 
     /**
      * @var integer
@@ -36,7 +36,7 @@ class Incident {
      * @ORM\GeneratedValue(strategy="AUTO")
      * @JMS\Expose
      */
-    protected $id;
+    private $id;
 
     /**
      * @var \DateTime
@@ -46,7 +46,7 @@ class Incident {
      * @JMS\Type("DateTime<'Y-m-d h:m:s'>")
      * @JMS\Groups({"api"})
      */
-    protected $date;
+    private $date;
 
     /**
      * @var \DateTime
@@ -56,7 +56,7 @@ class Incident {
      * @JMS\Type("DateTime<'Y-m-d h:m:s'>")
      * @JMS\Groups({"api"})
      */
-    protected $lastTimeDetected;
+    private $lastTimeDetected;
 
     /**
      * @var \DateTime
@@ -66,7 +66,7 @@ class Incident {
      * @JMS\Type("DateTime<'Y-m-d h:m:s'>")
      * @JMS\Groups({"api"})
      */
-    protected $renotificationDate;
+    private $renotificationDate;
 
     /**
      * @var \DateTime
@@ -76,7 +76,7 @@ class Incident {
      * @JMS\Type("DateTime<'Y-m-d h:m:s'>")
      * @JMS\Groups({"api"})
      */
-    protected $createdAt;
+    private $createdAt;
 
     /**
      * @var \DateTime
@@ -86,12 +86,12 @@ class Incident {
      * @JMS\Type("DateTime<'Y-m-d h:m:s'>")
      * @JMS\Groups({"api"})
      */
-    protected $updatedAt;
+    private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Model\ReporterInterface", inversedBy="incidents") 
+     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Model\ReporterInterface", inversedBy="incidents")
      */
-    protected $reporter;
+    private $reporter;
 
     /**
      * @var boolean
@@ -100,7 +100,7 @@ class Incident {
      * @JMS\Expose
      * @JMS\Type("boolean")
      */
-    protected $isClosed = false;
+    private $isClosed = false;
 
     /**
      * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\IncidentType",inversedBy="incidents")
@@ -108,263 +108,447 @@ class Incident {
      * @JMS\Expose
      * @JMS\Groups({"api"})
      */
-    protected $type;
+    private $type;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\IncidentFeed", inversedBy="incidents") 
+     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\IncidentFeed", inversedBy="incidents")
      * @ORM\JoinColumn(name="feed", referencedColumnName="slug")
      * @JMS\Expose
      * @JMS\Groups({"api"})
      * @@Assert\NotNull
      */
-    protected $feed;
+    private $feed;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\IncidentState", inversedBy="incidents") 
+     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\IncidentState", inversedBy="incidents")
      * @ORM\JoinColumn(name="state", referencedColumnName="slug")
      * @JMS\Expose
      * @JMS\Groups({"api"})
      */
-    protected $state;
+    private $state;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\Incident\Host\Host", inversedBy="incidents_as_origin") 
-     * @ORM\JoinColumn(name="state", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\Incident\Host\Host", inversedBy="incidents_as_origin")
      * @JMS\Expose
      * @JMS\Groups({"api"})
      */
-    protected $origin;
+    private $origin;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\Incident\Host\Host", inversedBy="incidents_as_destination") 
-     * @ORM\JoinColumn(name="state", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="CertUnlp\NgenBundle\Entity\Incident\Host\Host", inversedBy="incidents_as_destination")
      * @JMS\Expose
      * @JMS\Groups({"api"})
      */
-    protected $destination;
-
+    private $destination;
+    /**
+     * @Assert\File(maxSize = "500k")
+     */
+    private $evidence_file;
+    /**
+     * @ORM\Column(name="evidence_file_path", type="string",nullable=true)
+     */
+    private $evidence_file_path;
+    /**
+     * @ORM\Column(name="report_message_id", type="string",nullable=true)
+     */
+    private $report_message_id;
+    /**
+     * @var $evidence_file_temp
+     */
+    private $evidence_file_temp;
+    /**
+     * @var $sendReport
+     */
+    private $sendReport;
+    /**
+     * @var $report_edit
+     */
+    private $report_edit;
+    /**
+     * @var string
+     *
+     * @Gedmo\Slug(fields={"id"},separator="_")
+     * @ORM\Column(name="slug", type="string", length=100,nullable=true)
+     * @JMS\Expose
+     * @JMS\Groups({"api"})
+     * */
+    private $slug;
     /**
      * @ORM\OneToOne(targetEntity="CertUnlp\NgenBundle\Entity\IncidentCommentThread",mappedBy="incident",fetch="EXTRA_LAZY"))
      */
     private $comment_thread;
 
     /**
-     * @Assert\File(maxSize = "500k")
+     * Constructor
+     * @param null $origin
+     * @param null $destination
      */
-    protected $evidence_file;
-
-    /**
-     * @ORM\Column(name="evidence_file_path", type="string",nullable=true)
-     */
-    protected $evidence_file_path;
-
-    /**
-     * @ORM\Column(name="report_message_id", type="string",nullable=true)
-     */
-    protected $report_message_id;
-
-    /**
-     * @var $evidence_file_temp
-     */
-    protected $evidence_file_temp;
-
-    /**
-     * @var $sendReport
-     */
-    protected $sendReport;
-
-    /**
-     * @var $report_edit
-     */
-    protected $report_edit;
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId() {
-        return $this->id;
+    public function __construct($origin = null, $destination = null)
+    {
+        $this->origin = $origin;
+        $this->destination = $destination;
     }
 
-    /**
-     * Set ip
-     *
-     * @param string $ip
-     * @return Incident
-     */
-    public function setIp($ip) {
-        $this->ip = $ip;
-        return $this;
-    }
-
-    /**
-     * Get ip
-     *
-     * @return string 
-     */
-    public function getIp() {
-        return $this->ip;
-    }
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     * @return Incident
-     */
-    public function setCreatedAt($createdAt) {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime 
-     */
-    public function getCreatedAt() {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return Incident
-     */
-    public function setUpdatedAt($updatedAt) {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime 
-     */
-    public function getUpdatedAt() {
-        return $this->updatedAt;
-    }
-
-    /**
-     * Set isClosed
-     *
-     * @param boolean $isClosed
-     * @return Incident
-     */
-    public function setIsClosed($isClosed) {
-        $this->isClosed = $isClosed;
-
-        return $this;
-    }
-
-    /**
-     * Get isClosed
-     *
-     * @return boolean 
-     */
-    public function getIsClosed() {
-        return $this->isClosed;
-    }
-
-    /**
-     * Get isClosed
-     *
-     * @return boolean 
-     */
-    public function isClosed() {
-        return $this->getIsClosed();
-    }
-
-    /**
-     * Set type
-     *
-     * @param \CertUnlp\NgenBundle\Entity\IncidentType $type
-     * @return Incident
-     */
-    public function setType(\CertUnlp\NgenBundle\Entity\IncidentType $type = null) {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return \CertUnlp\NgenBundle\Entity\IncidentType 
-     */
-    public function getType() {
-        return $this->type;
-    }
-
-    /**
-     * Set date
-     *
-     * @param \DateTime $date
-     * @return Incident
-     */
-    public function setDate($date) {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Get date
-     *
-     * @return \DateTime 
-     */
-    public function getDate() {
-        return $this->date;
-    }
-
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getSlug();
     }
 
     /**
-     * Set reporter
+     * Get isClosed
      *
-     * @param \CertUnlp\NgenBundle\Model\ReporterInterface $reporter
+     * @return boolean
+     */
+    public function isClosed()
+    {
+        return $this->getIsClosed();
+    }
+
+    public function getOpenDays($lastTimeDetected = false)
+    {
+        if ($lastTimeDetected) {
+            $date = $this->getLastTimeDetected() ? $this->getLastTimeDetected() : $this->getDate();
+        } else {
+            $date = $this->getDate();
+        }
+        $diff = $date->diff(new \DateTime());
+        return $diff->days;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastTimeDetected(): \DateTime
+    {
+        return $this->lastTimeDetected;
+    }
+
+    /**
+     * @param \DateTime $lastTimeDetected
      * @return Incident
      */
-    public function setReporter(ReporterInterface $reporter = null) {
-        $this->reporter = $reporter;
-
+    public function setLastTimeDetected(\DateTime $lastTimeDetected): Incident
+    {
+        $this->lastTimeDetected = $lastTimeDetected;
         return $this;
     }
 
     /**
-     * Get reporter
+     * Get direction
      *
-     * @return \CertUnlp\NgenBundle\Model\ReporterInterface 
+     * @return string
      */
-    public function getReporter() {
+    public function getDirection()
+    {
+        return $this->origin->discr . "/" . $this->destination->discr;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return Incident
+     */
+    public function setId(int $id): Incident
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getRenotificationDate(): \DateTime
+    {
+        return $this->renotificationDate;
+    }
+
+    /**
+     * @param \DateTime $renotificationDate
+     * @return Incident
+     */
+    public function setRenotificationDate(\DateTime $renotificationDate): Incident
+    {
+        $this->renotificationDate = $renotificationDate;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     * @return Incident
+     */
+    public function setCreatedAt(\DateTime $createdAt): Incident
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     * @return Incident
+     */
+    public function setUpdatedAt(\DateTime $updatedAt): Incident
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReporter()
+    {
         return $this->reporter;
     }
 
-    public function close() {
+    /**
+     * @param mixed $reporter
+     * @return Incident
+     */
+    public function setReporter($reporter)
+    {
+        $this->reporter = $reporter;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param mixed $type
+     * @return Incident
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFeed()
+    {
+        return $this->feed;
+    }
+
+    /**
+     * @param mixed $feed
+     * @return Incident
+     */
+    public function setFeed($feed)
+    {
+        $this->feed = $feed;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrigin()
+    {
+        return $this->origin;
+    }
+
+    /**
+     * @param mixed $origin
+     * @return Incident
+     */
+    public function setOrigin($origin)
+    {
+        $this->origin = $origin;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDestination()
+    {
+        return $this->destination;
+    }
+
+    /**
+     * @param mixed $destination
+     * @return Incident
+     */
+    public function setDestination($destination)
+    {
+        $this->destination = $destination;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReportMessageId()
+    {
+        return $this->report_message_id;
+    }
+
+    /**
+     * @param mixed $report_message_id
+     * @return Incident
+     */
+    public function setReportMessageId($report_message_id)
+    {
+        $this->report_message_id = $report_message_id;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEvidenceFileTemp()
+    {
+        return $this->evidence_file_temp;
+    }
+
+    /**
+     * @param mixed $evidence_file_temp
+     * @return Incident
+     */
+    public function setEvidenceFileTemp($evidence_file_temp)
+    {
+        $this->evidence_file_temp = $evidence_file_temp;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSendReport()
+    {
+        return $this->sendReport;
+    }
+
+    /**
+     * @param mixed $sendReport
+     * @return Incident
+     */
+    public function setSendReport($sendReport)
+    {
+        $this->sendReport = $sendReport;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReportEdit()
+    {
+        return $this->report_edit;
+    }
+
+    /**
+     * @param mixed $report_edit
+     * @return Incident
+     */
+    public function setReportEdit($report_edit)
+    {
+        $this->report_edit = $report_edit;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCommentThread()
+    {
+        return $this->comment_thread;
+    }
+
+    /**
+     * @param mixed $comment_thread
+     * @return Incident
+     */
+    public function setCommentThread($comment_thread)
+    {
+        $this->comment_thread = $comment_thread;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Set state
+     *
+     * @param \CertUnlp\NgenBundle\Entity\IncidentState $state
+     * @return Incident
+     */
+    public function setState(IncidentState $state = null)
+    {
+        if (!in_array($state->getSlug(), ['open', 'stand_by'])) {
+            $this->close();
+        } else {
+            $this->open();
+        }
+        $this->state = $state;
+
+        return $this;
+    }
+
+    public function close()
+    {
         $this->setIsClosed(true);
     }
 
-    public function open() {
+    public function open()
+    {
         $this->setIsClosed(false);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEvidenceFile()
+    {
+        return $this->evidence_file;
     }
 
     /**
      * Set evidence_file
      *
-     * @param string $evidenceFile
+     * @param File $evidenceFile
      * @return Incident
      */
-    public function setEvidenceFile(File $evidenceFile = null) {
+    public function setEvidenceFile(File $evidenceFile = null)
+    {
         $this->evidence_file = $evidenceFile;
-// check if we have an old image path
         if ($this->getEvidenceFilePath()) {
-// store the old name to delete after the update
             $this->setEvidenceFileTemp($this->getEvidenceFilePath());
             $this->setEvidenceFilePath(null);
         } else {
@@ -374,32 +558,12 @@ class Incident {
     }
 
     /**
-     * Get evidence_file
-     *
-     * @return string 
-     */
-    public function getEvidenceFile() {
-        return $this->evidence_file;
-    }
-
-    /**
-     * Set evidence_file_path
-     *
-     * @param string $evidenceFilePath
-     * @return Incident
-     */
-    public function setEvidenceFilePath($evidenceFilePath) {
-        $this->evidence_file_path = $evidenceFilePath;
-
-        return $this;
-    }
-
-    /**
      * Get evidence_file_path
      *
-     * @return string 
+     * @return string
      */
-    public function getEvidenceFilePath($fullPath = false) {
+    public function getEvidenceFilePath($fullPath = false)
+    {
 
         if ($this->evidence_file_path) {
 
@@ -417,299 +581,29 @@ class Incident {
     /**
      * Get evidence_file_path
      *
-     * @return string 
+     * @return string
      */
-    public function getEvidenceSubDirectory() {
+    public function getEvidenceSubDirectory()
+    {
         return '/' . $this->getDate()->format('Y') . '/' . $this->getDate()->format('F') . '/' . $this->getDate()->format('d');
     }
 
     /**
-     * Set evidence_file_temp
-     *
-     * @param string $evidenceFileTemp
+     * @return \DateTime
+     */
+    public function getDate(): ?\DateTime
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param \DateTime $date
      * @return Incident
      */
-    public function setEvidenceFileTemp($evidenceFileTemp) {
-        $this->evidence_file_temp = $evidenceFileTemp;
-
+    public function setDate(\DateTime $date = null): Incident
+    {
+        $this->date = $date;
         return $this;
-    }
-
-    /**
-     * Get evidence_file_temp
-     *
-     * @return string 
-     */
-    public function getEvidenceFileTemp() {
-        return $this->evidence_file_temp;
-    }
-
-    /**
-     * Set state
-     *
-     * @param \CertUnlp\NgenBundle\Entity\IncidentState $state
-     * @return Incident
-     */
-    public function setState(\CertUnlp\NgenBundle\Entity\IncidentState $state = null) {
-        if (!in_array($state->getSlug(), ['open', 'stand_by'])) {
-            $this->close();
-        } else {
-            $this->open();
-        }
-        $this->state = $state;
-
-        return $this;
-    }
-
-    /**
-     * Get state
-     *
-     * @return \CertUnlp\NgenBundle\Entity\IncidentState 
-     */
-    public function getState() {
-        return $this->state;
-    }
-
-    public function getOpenDays($lastTimeDetected = false) {
-        if ($lastTimeDetected) {
-            $date = $this->getLastTimeDetected() ? $this->getLastTimeDetected() : $this->getDate();
-        } else {
-            $date = $this->getDate();
-        }
-        $diff = $date->diff(new \DateTime());
-        return $diff->days;
-    }
-
-    /**
-     * Set report_sent
-     *
-     * @param boolean $sendReport
-     * @return Incident
-     */
-    public function setSendReport($sendReport) {
-        $this->sendReport = $sendReport;
-
-        return $this;
-    }
-
-    /**
-     * Get sendReport
-     *
-     * @return boolean 
-     */
-    public function getSendReport() {
-        return $this->sendReport;
-    }
-
-    /**
-     * Set slug
-     *
-     * @param string $slug
-     * @return Incident
-     */
-    public function setSlug($slug) {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string 
-     */
-    public function getSlug() {
-        return $this->slug;
-    }
-
-    /**
-     * Set feed
-     *
-     * @param \CertUnlp\NgenBundle\Entity\IncidentFeed $feed
-     * @return Incident
-     */
-    public function setFeed(\CertUnlp\NgenBundle\Entity\IncidentFeed $feed = null) {
-        $this->feed = $feed;
-
-        return $this;
-    }
-
-    /**
-     * Get feed
-     *
-     * @return \CertUnlp\NgenBundle\Entity\IncidentFeed 
-     */
-    public function getFeed() {
-        return $this->feed;
-    }
-
-    /**
-     * Get evidence_file
-     *
-     * @return string 
-     */
-    public function getReportEdit() {
-        return $this->report_edit;
-    }
-
-    /**
-     * Get evidence_file
-     *
-     * @return string 
-     */
-    public function setReportEdit($report_edit) {
-        $this->report_edit = $report_edit;
-        return $this;
-    }
-
-    /**
-     * Set lastTimeDetected
-     *
-     * @param \DateTime $lastTimeDetected
-     * @return Incident
-     */
-    public function setLastTimeDetected($lastTimeDetected) {
-        $this->lastTimeDetected = $lastTimeDetected;
-
-        return $this;
-    }
-
-    /**
-     * Get lastTimeDetected
-     *
-     * @return \DateTime 
-     */
-    public function getLastTimeDetected() {
-        return $this->lastTimeDetected;
-    }
-
-    /**
-     * Set renotificationDate
-     *
-     * @param \DateTime $renotificationDate
-     * @return Incident
-     */
-    public function setRenotificationDate($renotificationDate) {
-        $this->renotificationDate = $renotificationDate;
-
-        return $this;
-    }
-
-    /**
-     * Get renotificationDate
-     *
-     * @return \DateTime 
-     */
-    public function getRenotificationDate() {
-        return $this->renotificationDate;
-    }
-
-    /**
-     * Set report_message_id
-     *
-     * @param string $reportMessageId
-     * @return Incident
-     */
-    public function setReportMessageId($reportMessageId) {
-        $this->report_message_id = $reportMessageId;
-
-        return $this;
-    }
-
-    /**
-     * Get report_message_id
-     *
-     * @return string 
-     */
-    public function getReportMessageId() {
-        return $this->report_message_id;
-    }
-
-    /**
-     * Set commentThread
-     *
-     * @param \CertUnlp\NgenBundle\Entity\IncidentCommentThread $commentThread
-     *
-     * @return Incident
-     */
-    public function setCommentThread(\CertUnlp\NgenBundle\Entity\IncidentCommentThread $commentThread = null) {
-        $this->comment_thread = $commentThread;
-
-        return $this;
-    }
-
-    /**
-     * Get commentThread
-     *
-     * @return \CertUnlp\NgenBundle\Entity\IncidentCommentThread
-     */
-    public function getCommentThread() {
-        return $this->comment_thread;
-    }
-
-    public function getEmails() {
-        return [];
-    }
-
-    public function isInternal() {
-        return false;
-    }
-
-    public function isExternal() {
-        return false;
-    }
-
-    /**
-     * Set origin
-     *
-     * @param \CertUnlp\NgenBundle\Entity\Incident\Host\Host $origin
-     *
-     * @return Incident
-     */
-    public function setOrigin(\CertUnlp\NgenBundle\Entity\Incident\Host\Host $origin = null) {
-        $this->origin = $origin;
-
-        return $this;
-    }
-
-    /**
-     * Get origin
-     *
-     * @return \CertUnlp\NgenBundle\Entity\Incident\Host\Host
-     */
-    public function getOrigin() {
-        return $this->origin;
-    }
-
-    /**
-     * Set destination
-     *
-     * @param \CertUnlp\NgenBundle\Entity\Incident\Host\Host $destination
-     *
-     * @return Incident
-     */
-    public function setDestination(\CertUnlp\NgenBundle\Entity\Incident\Host\Host $destination = null) {
-        $this->destination = $destination;
-
-        return $this;
-    }
-
-    /**
-     * Get destination
-     *
-     * @return \CertUnlp\NgenBundle\Entity\Incident\Host\Host
-     */
-    public function getDestination() {
-        return $this->destination;
-    }
-
-    /**
-     * Get direction
-     *
-     * @return string
-     */
-    public function getDirection() {
-        return $this->origin->discr . "/" . $this->destination->discr;
     }
 
 }

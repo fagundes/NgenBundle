@@ -11,6 +11,7 @@
 
 namespace CertUnlp\NgenBundle\Entity\Network;
 
+use CertUnlp\NgenBundle\Model\NetworkInterface;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 
@@ -18,10 +19,10 @@ use JMS\Serializer\Annotation as JMS;
  * Network
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="CertUnlp\NgenBundle\Entity\Network\NetworkRepository")
+ * @ORM\Entity()
  * @JMS\ExclusionPolicy("all")
  */
-class NetworkExternal extends Network
+class NetworkExternal extends Network implements NetworkInterface
 {
 
     /**
@@ -63,14 +64,55 @@ class NetworkExternal extends Network
     private $end_address;
 
     /**
+     * @return string
+     */
+    public function getStartAddress()
+    {
+        return $this->start_address;
+    }
+
+    /**
+     * @param string $start_address
+     * @return NetworkExternal
+     */
+    public function setStartAddress($start_address)
+    {
+        $this->start_address = $start_address;
+        $this->renewIp();
+        return $this;
+    }
+
+    /**
      * Set ip
      *
      * @param string $ip
      * @return Network
      */
-    public function setIp($ip)
+    public function renewIp()
     {
-        return parent::setIp($this->iprange2cidr($this->getStartAddress(), $this->getEndAddress()));
+        if ($this->getStartAddress() && $this->getEndAddress()) {
+            $this->setIp($this->iprange2cidr($this->getStartAddress(), $this->getEndAddress()));
+        }
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEndAddress()
+    {
+        return $this->end_address;
+    }
+
+    /**
+     * @param string $end_address
+     * @return NetworkExternal
+     */
+    public function setEndAddress($end_address)
+    {
+        $this->end_address = $end_address;
+        $this->renewIp();
+        return $this;
     }
 
     private function iprange2cidr($ipStart, $ipEnd)
@@ -82,7 +124,7 @@ class NetworkExternal extends Network
         while ($end >= $start) {
             $maxSize = 32;
             while ($maxSize > 0) {
-                $mask = hexdec(iMask($maxSize - 1));
+                $mask = hexdec($this->iMask($maxSize - 1));
                 $maskBase = $start & $mask;
                 if ($maskBase != $start)
                     break;
@@ -107,149 +149,6 @@ class NetworkExternal extends Network
         return base_convert((pow(2, 32) - pow(2, (32 - $s))), 10, 16);
     }
 
-    /**
-     * Set abuseEntity
-     *
-     * @param string $abuseEntity
-     *
-     * @return NetworkExternal
-     */
-    public function setAbuseEntity($abuseEntity)
-    {
-        $this->abuse_entity = $abuseEntity;
-
-        return $this;
-    }
-
-    /**
-     * Get abuseEntity
-     *
-     * @return string
-     */
-    public function getAbuseEntity()
-    {
-        return $this->abuse_entity;
-    }
-
-    /**
-     * Set abuseEntityEmails
-     *
-     * @param array $abuseEntityEmails
-     *
-     * @return NetworkExternal
-     */
-    public function setAbuseEntityEmails($abuseEntityEmails)
-    {
-        $this->abuse_entity_emails = $abuseEntityEmails;
-
-        return $this;
-    }
-
-    /**
-     * Get abuseEntityEmails
-     *
-     * @return array
-     */
-    public function getAbuseEntityEmails()
-    {
-        return $this->abuse_entity_emails;
-    }
-
-    /**
-     * Set startAddress
-     *
-     * @param string $startAddress
-     *
-     * @return NetworkExternal
-     */
-    public function setStartAddress($startAddress)
-    {
-        $this->start_address = $startAddress;
-
-        return $this;
-    }
-
-    /**
-     * Get startAddress
-     *
-     * @return string
-     */
-    public function getStartAddress()
-    {
-        return $this->start_address;
-    }
-
-    /**
-     * Set endAddress
-     *
-     * @param string $endAddress
-     *
-     * @return NetworkExternal
-     */
-    public function setEndAddress($endAddress)
-    {
-        $this->end_address = $endAddress;
-
-        return $this;
-    }
-
-    /**
-     * Get endAddress
-     *
-     * @return string
-     */
-    public function getEndAddress()
-    {
-        return $this->end_address;
-    }
-
-    /**
-     * Set country
-     *
-     * @param string $country
-     *
-     * @return NetworkExternal
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    /**
-     * Get country
-     *
-     * @return string
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * Set network_entity
-     *
-     * @param \CertUnlp\NgenBundle\Entity\Network\NetworkEntity $network_entity
-     * @return Network
-     */
-    public function setNetworkEntity(\CertUnlp\NgenBundle\Entity\Network\NetworkEntity $network_entity = null)
-    {
-        $this->network_entity = $network_entity;
-
-        return $this;
-    }
-
-    /**
-     * Get network_entity
-     *
-     * @return \CertUnlp\NgenBundle\Entity\Network\NetworkEntity
-     */
-    public function getNetworkEntity()
-    {
-        return $this->network_entity;
-    }
-
     public function isInternal()
     {
         return false;
@@ -260,4 +159,80 @@ class NetworkExternal extends Network
         return true;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getAbuseEntityEmails()
+    {
+        return $this->abuse_entity_emails;
+    }
+
+    /**
+     * @param mixed $abuse_entity_emails
+     * @return NetworkExternal
+     */
+    public function setAbuseEntityEmails($abuse_entity_emails)
+    {
+        $this->abuse_entity_emails = $abuse_entity_emails;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNetworkEntity()
+    {
+        return $this->network_entity;
+    }
+
+    /**
+     * @param mixed $network_entity
+     * @return NetworkExternal
+     */
+    public function setNetworkEntity($network_entity)
+    {
+        $this->network_entity = $network_entity;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param mixed $country
+     * @return NetworkExternal
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+        return $this;
+    }
+
+    public function getNetworkAdmin()
+    {
+        $this->getAbuseEntity();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAbuseEntity()
+    {
+        return $this->abuse_entity;
+    }
+
+    /**
+     * @param mixed $abuse_entity
+     * @return NetworkExternal
+     */
+    public function setAbuseEntity($abuse_entity)
+    {
+        $this->abuse_entity = $abuse_entity;
+        return $this;
+    }
 }

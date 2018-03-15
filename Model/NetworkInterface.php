@@ -68,12 +68,12 @@ interface NetworkInterface {
      */
     public function getNetworkEntity();
 
-    /**
-     * Get incidents
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getIncidents();
+//    /**
+//     * Get incidents
+//     *
+//     * @return \Doctrine\Common\Collections\Collection
+//     */
+//    public function getIncidents();
 
     public function equals(NetworkInterface $other);
 }

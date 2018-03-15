@@ -102,7 +102,7 @@ services:
  
     cert_unlp.ngen.host.handler:
         class:        "%cert_unlp.ngen.host.handler.class%"
-        arguments:    ["@doctrine.orm.entity_manager","%cert_unlp.ngen.host.class%","%cert_unlp.ngen.incident.form_type.class%","@form.factory","@cer"]
+        arguments:    ["@doctrine.orm.entity_manager","%cert_unlp.ngen.host.class%","%cert_unlp.ngen.host.form_type.class%","@form.factory","@cert_unlp.ngen.network.handler"]
 
     cert_unlp.ngen.incident.feed.handler:
         class:        "%cert_unlp.ngen.incident.feed.handler.class%"
@@ -120,13 +120,17 @@ services:
         class:        "%cert_unlp.ngen.incident.type.report.handler.class%"
         arguments:    ["@doctrine.orm.entity_manager","%cert_unlp.ngen.incident.type.report.class%","%cert_unlp.ngen.incident.type.report.form_type.class%","@form.factory"]
         
+    cert_unlp.ngen.network.handler:
+        class:        "%cert_unlp.ngen.network.handler.class%"
+        arguments:    ["@doctrine.orm.entity_manager","%cert_unlp.ngen.network.class%","%cert_unlp.ngen.network.form_type.class%","@form.factory","@cert_unlp.ngen.network.internal.handler","@cert_unlp.ngen.network.external.handler"]
+
     cert_unlp.ngen.network.internal.handler:
         class:        "%cert_unlp.ngen.network.internal.handler.class%"
         arguments:    ["@doctrine.orm.entity_manager","%cert_unlp.ngen.network.internal.class%","%cert_unlp.ngen.network.internal.form_type.class%","@form.factory"]
-    
+
     cert_unlp.ngen.network.external.handler:
         class:        "%cert_unlp.ngen.network.external.handler.class%"
-        arguments:    ["@doctrine.orm.entity_manager","%cert_unlp.ngen.network.external.class%","%cert_unlp.ngen.network.external.form_type.class%","@form.factory"]
+        arguments:    ["@doctrine.orm.entity_manager","%cert_unlp.ngen.network.external.class%","%cert_unlp.ngen.network.external.form_type.class%","@form.factory","@cert_unlp.ngen.network.external.rdap.client"]
     
     cert_unlp.ngen.network.admin.handler:
         class:        "%cert_unlp.ngen.network.admin.handler.class%"
@@ -216,8 +220,8 @@ services:
 #        tags:
 #            - { name: validator.constraint_validator, alias: type.has.report.validator }
             
-    cert_unlp.ngen.incident.host.rdap_client:
-        class:        CertUnlp\NgenBundle\Services\Host\HostRdapClient
+    cert_unlp.ngen.network.external.rdap.client:
+        class: CertUnlp\NgenBundle\Services\Network\NetworkExternalRdapClient
 
     app.form.registration:
         class: CertUnlp\NgenBundle\Form\UserRegistrationType

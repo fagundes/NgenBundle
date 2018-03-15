@@ -20,12 +20,14 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  */
-class Configuration implements ConfigurationInterface {
+class Configuration implements ConfigurationInterface
+{
 
     /**
      * {@inheritDoc}
      */
-    public function getConfigTreeBuilder() {
+    public function getConfigTreeBuilder()
+    {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('cert_unlp_ngen');
 
@@ -51,7 +53,8 @@ class Configuration implements ConfigurationInterface {
         return $treeBuilder;
     }
 
-    private function addHostSection(ArrayNodeDefinition $rootNode) {
+    private function addHostSection(ArrayNodeDefinition $rootNode)
+    {
         $rootNode
             ->children()
             ->arrayNode('hosts')
@@ -89,7 +92,8 @@ class Configuration implements ConfigurationInterface {
             ->end();
     }
 
-    private function addIncidentSection(ArrayNodeDefinition $rootNode) {
+    private function addIncidentSection(ArrayNodeDefinition $rootNode)
+    {
         $rootNode
             ->children()
             ->arrayNode('incidents')
@@ -294,6 +298,25 @@ class Configuration implements ConfigurationInterface {
             ->arrayNode('networks')
             ->addDefaultsIfNotSet()
             ->children()
+            ->scalarNode('class')
+            ->defaultValue('CertUnlp\NgenBundle\Entity\Network\Network')
+            ->end()
+            ->arrayNode('handler')
+            ->addDefaultsIfNotSet()
+            ->children()
+            ->scalarNode('class')
+            ->defaultValue('CertUnlp\NgenBundle\Services\Api\Handler\Network\NetworkHandler')
+            ->end()
+            ->end()
+            ->end()
+            ->arrayNode('form_type')
+            ->addDefaultsIfNotSet()
+            ->children()
+            ->scalarNode('class')
+            ->defaultValue('CertUnlp\NgenBundle\Form\NetworkType')
+            ->end()
+            ->end()
+            ->end()
             ->arrayNode('internal')
             ->addDefaultsIfNotSet()
             ->children()
@@ -304,7 +327,7 @@ class Configuration implements ConfigurationInterface {
             ->addDefaultsIfNotSet()
             ->children()
             ->scalarNode('class')
-            ->defaultValue('CertUnlp\NgenBundle\Services\Api\Handler\NetworkInternalHandler')
+            ->defaultValue('CertUnlp\NgenBundle\Services\Api\Handler\Network\NetworkInternalHandler')
             ->end()
             ->end()
             ->end()
@@ -328,7 +351,7 @@ class Configuration implements ConfigurationInterface {
             ->addDefaultsIfNotSet()
             ->children()
             ->scalarNode('class')
-            ->defaultValue('CertUnlp\NgenBundle\Services\Api\Handler\NetworkExternalHandler')
+            ->defaultValue('CertUnlp\NgenBundle\Services\Api\Handler\Network\NetworkExternalHandler')
             ->end()
             ->end()
             ->end()
@@ -395,7 +418,8 @@ class Configuration implements ConfigurationInterface {
             ->end();
     }
 
-    private function addUserSection(ArrayNodeDefinition $rootNode) {
+    private function addUserSection(ArrayNodeDefinition $rootNode)
+    {
         $rootNode
             ->children()
             ->arrayNode('users')
@@ -425,7 +449,8 @@ class Configuration implements ConfigurationInterface {
             ->end();
     }
 
-    private function addFeedSection(ArrayNodeDefinition $rootNode) {
+    private function addFeedSection(ArrayNodeDefinition $rootNode)
+    {
         $rootNode
             ->children()
             ->arrayNode('feeds')
@@ -467,7 +492,8 @@ class Configuration implements ConfigurationInterface {
             ->end();
     }
 
-    private function addSeedSection(ArrayNodeDefinition $rootNode) {
+    private function addSeedSection(ArrayNodeDefinition $rootNode)
+    {
         $rootNode
             ->children()
             ->arrayNode('seeds')
